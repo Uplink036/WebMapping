@@ -1,9 +1,9 @@
 import requests 
 from bs4 import BeautifulSoup 
-from map import plot_web_map
+
 def getHTMLResponse(url):
     headers = {'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"} 
-    html_response = requests.get(url=URL, headers=headers)
+    html_response = requests.get(url=url, headers=headers)
     return html_response
 
 def getSoup(html_response):
