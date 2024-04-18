@@ -37,10 +37,18 @@ def plot_nodes(root: Node):
     fig = go.Figure()
     # Add edges to the figure
     fig.add_trace(go.Scatter(x=edge_x, y=edge_y, mode='lines', line=dict(color='rgb(210,210,210)', width=1)))
-    # Add nodes to the figure
+    # Add nodes to the figure with names of the nodes
     fig.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers', name='nodes', marker=dict(symbol='circle-dot', size=10, color='rgb(0,240,0)', line=dict(color='rgb(50,50,50)', width=1))))
+    # Add the names of the nodes
+    # fig.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers', name='nodes', marker=dict(symbol='circle-dot', size=10, color='rgb(0,240,0)', line=dict(color='rgb(50,50,50)', width=1))))
+    for node in G.nodes():
+        x, y = pos[node]
+        fig.add_annotation(x=x, y=y, xref='x', yref='y', text=node, showarrow=True, arrowhead=7, ax=0, ay=-40)
     # Show the figure
     fig.show()
+
+
+    nx.draw(G, with_labels=True)
 
 def add_edges_to_graph(G, node: Node):
     """
