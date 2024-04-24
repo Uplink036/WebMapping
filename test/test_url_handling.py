@@ -1,8 +1,5 @@
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pytest 
-from src.Url_Handling import get_name_from_URL, isValidURL
+from webmap.Url_Handling import get_name_from_URL, isValidURL
 
 class TestURLHandling():
     def test_is_valid_URL(self):
