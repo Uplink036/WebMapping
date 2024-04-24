@@ -1,4 +1,4 @@
-from Node import Node
+from .Node import Node
 import plotly.graph_objects as go
 import networkx as nx
 
@@ -46,9 +46,6 @@ def plot_nodes(root: Node):
         fig.add_annotation(x=x, y=y, xref='x', yref='y', text=node, showarrow=True, arrowhead=7, ax=0, ay=-40)
     # Show the figure
     fig.show()
-
-
-    nx.draw(G, with_labels=True)
 
 def add_edges_to_graph(G, node: Node):
     """
