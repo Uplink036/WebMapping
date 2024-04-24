@@ -1,7 +1,7 @@
 from Map import plot_nodes
 from Node import Node
-from Scrapper import getHTMLResponse, getSoup, printParsedHTML, getAllLinks
-from Url_Handling import getNameFromURL
+from Scrapper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
+from Url_Handling import get_name_from_URL
 
 def main():
     URL = "https://deviceatlas.com/blog/list-of-user-agent-strings#desktop"
@@ -10,19 +10,19 @@ def main():
     urls = [URL]
     while len(urls) > 0 and len(websites) < 100:
         url = urls.pop(0)
-        website_name = getNameFromURL(url)
+        website_name = get_name_from_URL(url)
         if website_name not in websites:
             websites[website_name] = Node(website_name)
         
         if website_name in visited_websites:
             continue
 
-        html_response = getHTMLResponse(url)
-        soup = getSoup(html_response)
-        links = getAllLinks(soup)
+        html_response = get_HTML_response(url)
+        soup = get_soup(html_response)
+        links = get_all_links(soup)
 
         for link in links:
-            link_website_name = getNameFromURL(link)
+            link_website_name = get_name_from_URL(link)
             if link_website_name is not None:
                 urls.append(link)
                 if link_website_name not in websites:
@@ -31,7 +31,7 @@ def main():
         
         visited_websites[website_name] = True
             
-    plot_nodes(websites[getNameFromURL(URL)])
+    plot_nodes(websites[get_name_from_URL(URL)])
 
 if __name__ == "__main__":
     main()

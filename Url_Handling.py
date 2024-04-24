@@ -1,4 +1,4 @@
-def getNameFromURL(url):
+def get_name_from_URL(url):
     if not checkIfURL(url):
         return None
     return url.split("//")[-1]
