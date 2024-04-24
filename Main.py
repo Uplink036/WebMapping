@@ -1,7 +1,7 @@
 from Map import plot_nodes
 from Node import Node
 from Scrapper import getHTMLResponse, getSoup, printParsedHTML, getAllLinks
-
+from Url_Handling import getNameFromURL
 
 def main():
     URL = "https://deviceatlas.com/blog/list-of-user-agent-strings#desktop"
@@ -16,8 +16,6 @@ def main():
         
         if website_name in visited_websites:
             continue
-
-
 
         html_response = getHTMLResponse(url)
         soup = getSoup(html_response)
@@ -34,18 +32,6 @@ def main():
         visited_websites[website_name] = True
             
     plot_nodes(websites[getNameFromURL(URL)])
-
-
-def getNameFromURL(url):
-    if not checkIfURL(url):
-        return None
-    return url.split("//")[-1]
-
-def checkIfURL(url):
-    
-    if url is None:
-        return False
-    return url.startswith("http://") or url.startswith("https://")
 
 if __name__ == "__main__":
     main()
