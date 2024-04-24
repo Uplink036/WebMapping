@@ -3,11 +3,10 @@ from Node import Node
 from Scrapper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
 from Url_Handling import get_name_from_URL
 
-def main():
-    URL = "https://deviceatlas.com/blog/list-of-user-agent-strings#desktop"
+def main(input_url):
     websites = {}
     visited_websites = {}
-    urls = [URL]
+    urls = [input_url]
     while len(urls) > 0 and len(websites) < 100:
         url = urls.pop(0)
         website_name = get_name_from_URL(url)
@@ -31,7 +30,8 @@ def main():
         
         visited_websites[website_name] = True
             
-    plot_nodes(websites[get_name_from_URL(URL)])
+    plot_nodes(websites[get_name_from_URL(input_url)])
 
 if __name__ == "__main__":
-    main()
+    URL = "https://scrapeme.live/shop/"
+    main(URL)
