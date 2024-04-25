@@ -24,4 +24,4 @@ class Node:
         return self.website 
 
     def __str__(self):
-        return self.data
+        return self.website
