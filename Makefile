@@ -14,8 +14,9 @@ cov: code-coverage
 
 code-coverage:
 	coverage run -m pytest
-	coverage report -m --include="src/*"
 
 branch-coverage:
 	coverage run -m --branch pytest
+
+report: 
 	coverage report -m --include="src/*"
