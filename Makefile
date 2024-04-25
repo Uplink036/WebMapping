@@ -17,5 +17,5 @@ code-coverage:
 	coverage report -m --include="src/*"
 
 branch-coverage:
-	coverage run -m pytest
+	coverage run -m --branch pytest
 	coverage report -m --include="src/*"
