@@ -1,24 +1,24 @@
 # Always able to run the following commands:
 .PHONY: test build install cov code-coverage branch-coverage
 
-build: 
+build: ## Build the (local) package
 	python3 -m build
 
-install:
+install: ## Install the (local) package
 	pip install -e .
 
-test: 
+test: ## Run tests
 	pytest
 
-cov: code-coverage
+cov: code-coverage ## Run tests with code coverage
 
-code-coverage:
+code-coverage: ## Run tests with code coverage
 	coverage run -m pytest
 
-branch-coverage:
+branch-coverage: ## Run tests with branch coverage
 	coverage run -m --branch pytest
 
-report: 
+report: ## Generate coverage report
 	coverage report -m --include="src/*"
 
 # Thanks to Andreas Bauer
