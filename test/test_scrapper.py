@@ -1,7 +1,7 @@
 import pytest
 from unittest import mock
 
-from webmap.Scrapper import get_HTML_response, get_soup, get_all_links, print_parsed_HTML, printRawHTML
+from webmap.Scrapper import get_HTML_response, get_soup, get_all_links, print_parsed_HTML, print_raw_HTML
 
 class TestScrapper():
     def test_get_HTML_response(self):
@@ -30,7 +30,7 @@ class TestScrapper():
         mock_html_response.content = html_example_content
 
         with mock.patch('builtins.print') as mock_print:
-            printRawHTML(mock_html_response)
+            print_raw_HTML(mock_html_response)
             mock_print.assert_called_once()
 
     def test_get_all_links(self):

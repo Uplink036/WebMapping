@@ -16,7 +16,7 @@ def get_all_links(soup):
         links.append(link.get('href'))
     return links
 
-def printRawHTML(html_response):
+def print_raw_HTML(html_response):
     raw_html = html_response.content
     print(raw_html)
 
