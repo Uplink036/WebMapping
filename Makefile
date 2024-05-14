@@ -1,12 +1,11 @@
-# Always able to run the following commands:
-.PHONY: test build install cov code-coverage branch-coverage
-
 build: ## Build the (local) package
 	python3 -m build
 
 install: ## Install the (local) package
+	pip install -r requirements.txt
 	pip install -e .
 
+.PHONY: test
 test: ## Run tests
 	pytest
 
