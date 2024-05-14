@@ -8,8 +8,5 @@ networkx
 ## Plotting
 numpy
 matplotlib
-# Testing
-pytest
-coverage
 # building
 build
