@@ -1,5 +1,7 @@
 class Node:
     def __init__(self, website):
+        if not self._is_valid(website):
+            raise ValueError
         self.website = website
         self.edges = {}
         self.visited = False
@@ -22,6 +24,11 @@ class Node:
 
     def get_website(self):
         return self.website 
+    
+    def _is_valid(self, website):
+        if website is None:
+            return False
+        return True
 
     def __str__(self):
         return self.website
