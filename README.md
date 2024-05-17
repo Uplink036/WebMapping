@@ -7,7 +7,6 @@ A project that is designed to map a part of the web. Meaning, given a URL, it wi
 In the future, there might be functionality to give the program n amounts of functions, which it will do once for each website. 
 
 ## How to Use
-
 ### Prerequisites
 
 Current dependicdes are:
@@ -21,7 +20,7 @@ Current dependicdes are:
 - Plotting
   - numpy
   - matplotlib
-- building
+- Building
   - build
 
 Most are needed, besides build. These can be installed using `pip install -r requirements.txt`
@@ -53,6 +52,10 @@ import webmap
 ```
 
 See the [main.py](./Main.py) script to see how it runs. 
+
+### DevContainers
+
+This project has a devcontainer, which you can use to get a working example up quicky, if you feel like it. Does require docker, and is helped by the vscode exstensions like [this](https://code.visualstudio.com/docs/devcontainers/containers).
 
 ## License
 
