@@ -12,11 +12,9 @@ attrs = {"content.return_value":"""
 HTML_EXAMPLE_CONTENT = mock.MagicMock(**attrs)
 
 @responses.activate
-@given(st.text(
-        alphabet=st.from_regex(regex=r"^https://.$", fullmatch=True),
-        min_size=10,
-    ))
-def test_fuzz_Crawler(url) -> None:
+@given(st.from_regex(r"[a-zA-Z][a-zA-Z/.?+]*", fullmatch=True))
+def test_fuzz_Crawler(domain) -> None:
+    url = "https://" + domain
     crawlerObject = Crawler(url=url)
     responses.add(
         responses.GET,
