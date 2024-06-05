@@ -1,7 +1,7 @@
 import pytest 
 from hypothesis import given, assume
 from hypothesis import strategies as st
-from webmap.Url_Handling import get_name_from_URL, isValidURL
+from webmap.url_handling import get_name_from_URL, isValidURL
 
 class TestURLHandling():
     def test_is_valid_URL(self):

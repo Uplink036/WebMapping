@@ -1,4 +1,4 @@
-from .Node import Node
+from .node import Node
 import plotly.graph_objects as go
 import networkx as nx
 

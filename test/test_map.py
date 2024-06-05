@@ -1,8 +1,8 @@
 import pytest
 from unittest import mock
 
-from webmap.Node import Node
-from webmap.Map import plot_nodes
+from webmap.node import Node
+from webmap.map import plot_nodes
 
 class TestMap():
     def test_plot_nodes(self):

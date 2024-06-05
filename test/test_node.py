@@ -1,7 +1,7 @@
 import pytest
 from hypothesis import given, assume
 from hypothesis import strategies as st
-from webmap.Node import Node
+from webmap.node import Node
 
 class TestNode():
     @given(st.text())

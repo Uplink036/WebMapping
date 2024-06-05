@@ -1,7 +1,7 @@
-from .Map import plot_nodes
-from .Node import Node
-from .Scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
-from .Url_Handling import get_name_from_URL
+from .map import plot_nodes
+from .node import Node
+from .scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
+from .url_handling import get_name_from_URL
 
 
 class Crawler:

@@ -23,8 +23,9 @@ def test_fuzz_Crawler(domain) -> None:
         status=404,
     )
 
-    with mock.patch('webmap.Crawler.plot_nodes') as mock_plot:
+    with mock.patch('webmap.crawler.plot_nodes') as mock_plot:
         crawlerObject.run()
+        mock_plot.assert_called_once()
 
 if __name__ == "__main__":
     pytest.main(["test/test_crawler.py"])
