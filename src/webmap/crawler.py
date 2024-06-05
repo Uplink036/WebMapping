@@ -26,16 +26,21 @@ class Crawler:
 
             html_response = get_HTML_response(url)
             soup = get_soup(html_response)
-            links = get_all_links(soup)
-
+            links = get_links(soup)
             for link in links:
-                link_website_name = get_name_from_URL(link)
-                if link_website_name is not None:
-                    urls.append(link)
-                    if link_website_name not in websites:
-                        websites[link_website_name] = Node(link_website_name)
-                    websites[website_name].add_edge(websites[link_website_name])
-            
+                if link not in websites:
+                    websites[link] = Node(link)
+                websites[website_name].add_edge(websites[link])
+        
             visited_websites[website_name] = True
                 
         plot_nodes(websites[get_name_from_URL(self.starting_url)])
+
+def get_links(soup):
+    links = get_all_links(soup)
+    list_of_valid_links = []
+    for link in links:
+        link_website_name = get_name_from_URL(link)
+        if link_website_name is not None:
+            list_of_valid_links.append(link)
+    return list_of_valid_links
