@@ -7,6 +7,10 @@ from .url_handling import get_name_from_URL
 class Crawler:
     def __init__(self, url) -> None:
         self.starting_url = url
+        self._functions = []
+
+    def add_function(self, function):
+        self._functions.append(function)
 
     def run(self):
         if self.starting_url is None:
@@ -31,6 +35,9 @@ class Crawler:
                 if link not in websites:
                     websites[link] = Node(link)
                 websites[website_name].add_edge(websites[link])
+
+            for function in self._functions:
+                function(soup)
         
             visited_websites[website_name] = True
                 
