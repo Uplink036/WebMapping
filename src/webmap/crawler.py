@@ -7,7 +7,7 @@ from .url_handling import get_name_from_URL
 class Crawler:
     def __init__(self, url = None, web_size = 100) -> None:
         self.starting_url = url
-        self._max_websites = web_size
+        self._max_websize = web_size
         self._websites = {}
 
 
@@ -17,7 +17,7 @@ class Crawler:
     
         visited_websites = {}
         urls = [self.starting_url]
-        while len(urls) > 0 and self._count_websites() < self.max_websites:
+        while len(urls) > 0 and self._count_websites() < self._max_websize:
             url = urls.pop(0)
             website_name = get_name_from_URL(url)
             if not self._encounted_website(website_name):
@@ -25,7 +25,7 @@ class Crawler:
                 
             if website_name not in visited_websites:
                 links = self._fetch_links(url)
-                urls += self._parse_links(links)
+                urls += self._parse_links(website_name, links)
                 visited_websites[website_name] = True
                 
         plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
@@ -60,7 +60,7 @@ class Crawler:
 
 
     def _add_website(self, website_name):
-        self._websites[website_name] = Node(self._website_name)
+        self._websites[website_name] = Node(website_name)
 
 
     def _add_website_link(self, origin, end):
