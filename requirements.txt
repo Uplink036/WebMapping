@@ -10,3 +10,5 @@ numpy
 matplotlib
 # building
 build
+# Testing
+coverage
