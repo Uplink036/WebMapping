@@ -25,7 +25,7 @@ class Crawler:
                 
             if website_name not in visited_websites:
                 links = self._fetch_links(url)
-                self._parse_links(links)
+                urls += self._parse_links(links)
                 visited_websites[website_name] = True
                 
         plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
@@ -43,6 +43,7 @@ class Crawler:
                 self._add_website(link_website_name)
 
             self._add_website_link(website_origin, link_website_name)
+        return found_urls
 
 
     def _fetch_links(self, url=None):
