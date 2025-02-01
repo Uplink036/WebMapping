@@ -11,9 +11,7 @@ def get_soup(html_response):
     return soup
 
 def get_all_links(soup):
-    links = []
-    for link in soup.find_all('a'):
-        links.append(link.get('href'))
+    links = [link.get('href') for link in soup.find_all('a')]
     return links
 
 def print_raw_HTML(html_response):
