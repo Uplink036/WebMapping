@@ -8,7 +8,6 @@ services:
     depends_on:
       - database
   database:
-    environment:
-    - MONGO_INITDB_ROOT_USERNAME=user
-    - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - 27017:27017
     image: "mongodb/mongodb-community-server"
