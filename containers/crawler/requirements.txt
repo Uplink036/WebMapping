@@ -10,3 +10,5 @@ hypothesis
 pytest
 # Database
 pymongo
+# ENV 
+python-dotenv

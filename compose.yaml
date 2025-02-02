@@ -1,8 +1,8 @@
 services:
-  web:
-    build: . 
+  crawler:
+    build: containers/crawler
     environment:
-      - CONN_STR=mongodb://user:pass@mongodb
+      - SCRUB_DB=1
     volumes:
       - ./logs:/logs
     depends_on:
