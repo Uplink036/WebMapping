@@ -2,15 +2,11 @@
 requests
 html5lib
 bs4
-# Graphing
-plotly
-networkx
-## Plotting
-numpy
-matplotlib
 # building
 build
 # Testing
 coverage
+hypothesis
+pytest
 # Database
 pymongo
