@@ -1,4 +1,3 @@
-imp
 import pymongo
 
 def init_db():
@@ -6,6 +5,10 @@ def init_db():
     db = clint["webmap"]
     return db
 
-def init_website_collection(db):
-    col = db["websites"]
+def init_node_collection(db):
+    col = db["nodes"]
+    return col
+
+def init_edge_collection(db):
+    col = db["edges"]
     return col

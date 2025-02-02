@@ -1,20 +1,23 @@
-from .map import plot_nodes
+from .database import init_db, init_edge_collection, init_node_collection
 from .node import Node
 from .scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
 from .url_handling import get_name_from_URL
-
-
+import pymongo
+import uuid
 class Crawler:
     def __init__(self, url = None, web_size = 100) -> None:
         self.starting_url = url
         self._max_websize = web_size
         self._websites = {}
+        self._db = init_db()
+        self._website_col = init_node_collection(self._db)
+        self._links_col = init_edge_collection(self._db)
 
 
     def run(self):
         if self.starting_url is None:
             raise ValueError
-    
+
         visited_websites = {}
         urls = [self.starting_url]
         while len(urls) > 0 and self._count_websites() < self._max_websize:
@@ -28,7 +31,7 @@ class Crawler:
                 urls += self._parse_links(website_name, links)
                 visited_websites[website_name] = True
                 
-        plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
+        #plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
 
 
     def _parse_links(self, website_origin, list_with_links):
@@ -56,16 +59,25 @@ class Crawler:
     
 
     def _encounted_website(self, website_name):
-        return website_name in self._websites
+        occurences = self._website_col.count_documents({"label": website_name})
+        return True if int(occurences) == 1 else False
 
 
     def _add_website(self, website_name):
-        self._websites[website_name] = Node(website_name)
+        print(website_name)
+        node = {
+            'label': website_name
+        }
+        self._website_col.insert_one(node)
 
 
     def _add_website_link(self, origin, end):
-        self._websites[origin].add_edge(self._websites[end])
+        edge = {
+            'source': origin,
+            'target': end
+        }
+        self._links_col.insert_one(edge)
 
 
     def _count_websites(self):
-        return len(self._websites)
+        return self._website_col.count_documents({})
