@@ -5,6 +5,7 @@ bs4
 # Graphing
 plotly
 networkx
+graphviz
 ## Plotting
 numpy
 matplotlib

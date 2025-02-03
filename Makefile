@@ -4,6 +4,7 @@ build: ## Build the (local) package
 install: ## Install the (local) package
 	pip install -r requirements.txt
 	pip install -e .
+	sudo apt install graphviz
 
 .PHONY: test
 test: ## Run tests

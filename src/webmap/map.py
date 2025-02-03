@@ -1,7 +1,8 @@
+import graphviz.dot
 from .node import Node
 import plotly.graph_objects as go
 import networkx as nx
-
+import graphviz
 def plot_nodes(root: Node):
     """
     Plot a graph of the nodes in the graph starting from the root node.
@@ -57,3 +58,16 @@ def add_edges_to_graph(G, node: Node):
         if not edge.visited:
             edge.visited = True
             add_edges_to_graph(G, edge)
+
+def node_to_dot(root: Node):
+    dot = graphviz.Digraph("Web")
+    recursively_add_nodes(dot, root)
+    dot.render("output")
+
+def recursively_add_nodes(dot: graphviz.Digraph, node: Node):
+    dot.node(node.get_website())
+    node.visited = True
+    for child in node.get_edges().values():
+        dot.edge(node.get_website(), child.get_website())
+        if not child.visited:
+            recursively_add_nodes(dot, child)
