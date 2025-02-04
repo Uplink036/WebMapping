@@ -1,4 +1,4 @@
-from .map import plot_nodes
+from .map import plot_nodes, node_to_dot
 from .node import Node
 from .scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
 from .url_handling import get_name_from_URL
@@ -28,7 +28,7 @@ class Crawler:
                 urls += self._parse_links(website_name, links)
                 visited_websites[website_name] = True
                 
-        plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
+        node_to_dot(self._websites[get_name_from_URL(self.starting_url)])
 
 
     def _parse_links(self, website_origin, list_with_links):

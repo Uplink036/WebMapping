@@ -61,13 +61,14 @@ def add_edges_to_graph(G, node: Node):
 
 def node_to_dot(root: Node):
     dot = graphviz.Digraph("Web")
+    root.visited = True
     recursively_add_nodes(dot, root)
     dot.render("output")
 
 def recursively_add_nodes(dot: graphviz.Digraph, node: Node):
     dot.node(node.get_website())
-    node.visited = True
     for child in node.get_edges().values():
         dot.edge(node.get_website(), child.get_website())
         if not child.visited:
+            node.visited = True
             recursively_add_nodes(dot, child)

@@ -19,8 +19,10 @@ class TestMap():
         node1 = Node("www.google.com")
         node2 = Node("www.facebook.com")
         node3 = Node("www.twitter.com")
+        node4 = Node("www.x.com")
         node1.add_edge(node2)
         node1.add_edge(node3)
+        node3.add_edge(node4)
         node_to_dot(node1)
 
 
