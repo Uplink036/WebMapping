@@ -6,15 +6,11 @@ def plot_nodes(root: Node):
     """
     Plot a graph of the nodes in the graph starting from the root node.
     """
-    # Create a directed graph
     G = nx.DiGraph()
-    # Add the root node to the graph
     G.add_node(root.get_website())
-    # Add the edges to the graph
     add_edges_to_graph(G, root)
-    # Create a layout for the graph
     pos = nx.spring_layout(G)
-    # Create a list of edges
+
     edge_x = []
     edge_y = []
     for edge in G.edges():
@@ -26,27 +22,78 @@ def plot_nodes(root: Node):
         edge_y.append(y0)
         edge_y.append(y1)
         edge_y.append(None)
-    # Create a list of nodes
+
+    edge_trace = go.Scatter(
+        x=edge_x, y=edge_y,
+        line=dict(width=0.5, color='#888'),
+        hoverinfo='none',
+        mode='lines')
+    
     node_x = [] 
     node_y = []
     for node in G.nodes():
         x, y = pos[node]
         node_x.append(x)
         node_y.append(y)
-    # Create a figure
-    fig = go.Figure()
-    # Add edges to the figure
-    fig.add_trace(go.Scatter(x=edge_x, y=edge_y, mode='lines', line=dict(color='rgb(210,210,210)', width=1)))
-    # Add nodes to the figure with names of the nodes
-    fig.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers', name='nodes', marker=dict(symbol='circle-dot', size=10, color='rgb(0,240,0)', line=dict(color='rgb(50,50,50)', width=1))))
-    # Add the names of the nodes
-    # fig.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers', name='nodes', marker=dict(symbol='circle-dot', size=10, color='rgb(0,240,0)', line=dict(color='rgb(50,50,50)', width=1))))
-    for node in G.nodes():
-        x, y = pos[node]
-        fig.add_annotation(x=x, y=y, xref='x', yref='y', text=node, showarrow=True, arrowhead=7, ax=0, ay=-40)
-    # Show the figure
-    fig.show()
 
+    
+    node_trace = go.Scatter(
+        x=node_x, y=node_y,
+        mode='markers',
+        hoverinfo='text',
+        marker=dict(
+            showscale=True,
+            # colorscale options
+            #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
+            #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
+            #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
+            colorscale='YlGnBu',
+            reversescale=True,
+            color=[],
+            size=10,
+            colorbar=dict(
+                thickness=15,
+                title=dict(
+                text='Node Connections',
+                side='right'
+                ),
+                xanchor='left',
+            ),
+            line_width=2))
+    
+    node_adjacencies = []
+    node_text = []
+    for node, adjacencies in enumerate(G.adjacency()):
+        node_adjacencies.append(len(adjacencies[1]))
+        node_text.append(f'{adjacencies[0]}\n | # of connections: '+str(len(adjacencies[1])))
+
+    node_trace.marker.color = node_adjacencies
+    node_trace.text = node_text
+
+    fig = go.Figure(data=[edge_trace, node_trace],
+                layout=go.Layout(
+                    title=dict(
+                        text="<br>Network graph of the web<br>",
+                        font=dict(
+                            size=16
+                        )
+                    ),
+                    showlegend=False,
+                    hovermode='closest',
+                    margin=dict(b=20,l=5,r=5,t=40),
+                    annotations=[ dict(
+                        text="",
+                        showarrow=False,
+                        xref="paper", yref="paper",
+                        x=0.005, y=-0.002 ) ],
+                    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
+                    )
+    fig.write_image("img.png")
+    fig.write_image("img.svg")
+    fig.write_html("html.html")
+
+    
 def add_edges_to_graph(G, node: Node):
     """
     Add the edges of the node to the graph.
