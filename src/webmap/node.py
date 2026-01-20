@@ -1,3 +1,5 @@
+from typing import Self
+
 class Node:
     def __init__(self, website):
         if not self._is_valid(website):
@@ -6,10 +8,10 @@ class Node:
         self.edges: dict[str, str] = {}
         self.visited: bool = False
 
-    def add_edge(self, node: Node) -> None:
-        self.edges[node.website] = node
-        if node.get_edge(self.website) is None:
-            node.add_edge(self)
+    def add_edge(self, other_node: Self) -> None:
+        self.edges[other_node.website] = other_node
+        if other_node.get_edge(self.website) is None:
+            other_node.add_edge(self)
 
     def get_edge(self, name: str) -> str | None:
         if name in self.edges:
