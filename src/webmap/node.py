@@ -6,7 +6,7 @@ class Node:
         self.edges: dict[str, str] = {}
         self.visited: bool = False
 
-    def add_edge(self, node: str) -> None:
+    def add_edge(self, node: Node) -> None:
         self.edges[node.website] = node
         if node.get_edge(self.website) is None:
             node.add_edge(self)
