@@ -1,14 +1,14 @@
 from .map import plot_nodes
 from .node import Node
-from .scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
+from .scraper import get_HTML_response, get_soup, get_all_links
 from .url_handling import get_name_from_URL
 
 
 class Crawler:
-    def __init__(self, url = None, web_size = 100) -> None:
-        self.starting_url = url
-        self._max_websize = web_size
-        self._websites = {}
+    def __init__(self, url = None, web_size: int = 100) -> None:
+        self.starting_url: str = url
+        self._max_websize: int = web_size
+        self._websites: dict[str, list[str]] = {}
 
 
     def run(self):
