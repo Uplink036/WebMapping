@@ -12,3 +12,8 @@ matplotlib
 build
 # Testing
 coverage
+hypothesis
+responses
+
+# Output
+html5lib
