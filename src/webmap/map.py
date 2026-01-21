@@ -1,4 +1,4 @@
-from .node import Node
+from webmap.node import Node
 import plotly.graph_objects as go
 import networkx as nx
 

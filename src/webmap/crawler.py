@@ -1,35 +1,33 @@
-from .map import plot_nodes
-from .node import Node
-from .scraper import get_HTML_response, get_soup, get_all_links
-from .url_handling import get_name_from_URL
-
+from webmap.map import plot_nodes
+from webmap.node import Node
+from webmap.scraper import get_HTML_response, get_soup, get_all_links
+from webmap.url_handling import get_name_from_URL
+from webmap.database.database import Neo4JGraph, Neo4JStack
 
 class Crawler:
-    def __init__(self, url = None, web_size: int = 100) -> None:
+    def __init__(self, url = None) -> None:
         self.starting_url: str = url
-        self._max_websize: int = web_size
-        self._websites: dict[str, list[str]] = {}
-
+        self._graph: Neo4JGraph = Neo4JGraph()
+        self._stack: Neo4JStack = Neo4JStack()
 
     def run(self) -> None:
-        if self.starting_url is None:
-            raise ValueError
+        if self._stack.count() == 0:
+            if self.starting_url is None:
+                raise ValueError
+            self._stack.push(self.starting_url)
     
-        visited_websites = {}
-        urls = [self.starting_url]
-        while len(urls) > 0 and self._count_websites() < self._max_websize:
-            url = urls.pop(0)
+        while self._stack.count() > 0:
+            url = self._stack.pop()
+            if url is None:
+                raise ValueError("Crawler error: Stack returned unexpected value")
             website_name = get_name_from_URL(url)
-            if not self._encounted_website(website_name):
-                self._add_website(website_name)
+            if not self._graph.in_database(website_name):
+                self._graph.add_node(website_name)
                 
-            if website_name not in visited_websites:
+            if self._graph.in_database(website_name):
                 links = self._fetch_links(url)
-                urls += self._parse_links(website_name, links)
-                visited_websites[website_name] = True
-                
-        plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
-
+                for element in self._parse_links(website_name, links):
+                    self._stack.push(element)
 
     def _parse_links(self, website_origin: str, list_with_links: list[str]) -> list[str]:
         found_urls = []
@@ -39,10 +37,10 @@ class Crawler:
                 continue
 
             found_urls.append(link)
-            if not self._encounted_website(link_website_name): 
-                self._add_website(link_website_name)
+            if not self._graph.in_database(link_website_name): 
+                self._graph.add_node(link_website_name)
 
-            self._add_website_link(website_origin, link_website_name)
+            self._graph.add_edge(website_origin, link_website_name)
         return found_urls
 
 
@@ -53,19 +51,3 @@ class Crawler:
         html_response = get_HTML_response(url)
         soup = get_soup(html_response)
         return get_all_links(soup)
-    
-
-    def _encounted_website(self, website_name: str) -> bool:
-        return website_name in self._websites
-
-
-    def _add_website(self, website_name: str) -> None:
-        self._websites[website_name] = Node(website_name)
-
-
-    def _add_website_link(self, origin: str, end: str) -> None:
-        self._websites[origin].add_edge(self._websites[end])
-
-
-    def _count_websites(self) -> int:
-        return len(self._websites)
