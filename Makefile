@@ -17,6 +17,11 @@ compose: ## Start the compose
 stop: ## Stop the compose
 	docker compose down
 
+clean: ## Clean the repo 
+	rm -f pytest.xml
+	rm -f coverage.xml
+	rm -f .coverage
+
 # Thanks to Andreas Bauer
 help: ## Show this help
 	@grep -E '^[.a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
