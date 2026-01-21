@@ -3,7 +3,8 @@ from typing import Any
 from neo4j import GraphDatabase
 
 from webmap.database.connection import verify_connectivity
-from webmap.database.constants import AUTH_PASSWORD, AUTH_USERNAME, DATABASE_URI
+from webmap.database.constants import (AUTH_PASSWORD, AUTH_USERNAME,
+                                       DATABASE_URI)
 
 
 class Database:
