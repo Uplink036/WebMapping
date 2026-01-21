@@ -21,6 +21,8 @@ clean: ## Clean the repo
 	rm -f pytest.xml
 	rm -f coverage.xml
 	rm -f .coverage
+	rm -f .pytest_cache
+	rm -f .hypothesis
 
 # Thanks to Andreas Bauer
 help: ## Show this help

@@ -12,7 +12,9 @@ dependencies = [
     "plotly",
     "networkx",
     "numpy",
-    "matplotlib"
+    "matplotlib",
+    "neo4j",
+    "dotenv"
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
