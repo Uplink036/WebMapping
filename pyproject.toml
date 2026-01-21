@@ -1,6 +1,6 @@
 [project]
 name = "WebMapping"
-version = "1.0.0"
+version = "1.0.1"
 authors = [{name="Uplink036"}]
 description = "A simple web mapping application"
 readme = "README.md"
@@ -23,7 +23,8 @@ dev = [
     "coverage", 
     "hypothesis",
     "responses",
-    "pytest"
+    "pytest",
+    "pytest-cov"
 ]
 
 [build-system]
