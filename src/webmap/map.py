@@ -1,6 +1,8 @@
-from webmap.node import Node
-import plotly.graph_objects as go
 import networkx as nx
+import plotly.graph_objects as go
+
+from webmap.node import Node
+
 
 def plot_nodes(root: Node):
     """

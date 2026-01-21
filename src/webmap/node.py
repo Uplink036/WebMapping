@@ -1,5 +1,6 @@
 from typing import Self
 
+
 class Node:
     def __init__(self, website):
         if not self._is_valid(website):

@@ -1,6 +1,7 @@
-import requests 
+import requests
+from bs4 import BeautifulSoup
 from requests import Response
-from bs4 import BeautifulSoup 
+
 
 def get_HTML_response(url) -> Response:
     headers = {'User-Agent': "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"} 

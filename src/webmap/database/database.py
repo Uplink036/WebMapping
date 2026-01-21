@@ -1,7 +1,12 @@
-from webmap.database.constants import AUTH_PASSWORD, AUTH_USERNAME, DATABASE_URI 
-from neo4j import GraphDatabase
-from webmap.database.connection import verify_connectivity
 from typing import Any
+
+from neo4j import GraphDatabase
+
+from webmap.database.connection import verify_connectivity
+from webmap.database.constants import (AUTH_PASSWORD, AUTH_USERNAME,
+                                       DATABASE_URI)
+
+
 class Database:
     def __init__(self):
         if verify_connectivity() is False:

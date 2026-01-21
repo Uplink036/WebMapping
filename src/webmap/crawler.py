@@ -1,8 +1,9 @@
+from webmap.database.database import Neo4JGraph, Neo4JStack
 from webmap.map import plot_nodes
 from webmap.node import Node
-from webmap.scraper import get_HTML_response, get_soup, get_all_links
+from webmap.scraper import get_all_links, get_HTML_response, get_soup
 from webmap.url_handling import get_name_from_URL
-from webmap.database.database import Neo4JGraph, Neo4JStack
+
 
 class Crawler:
     def __init__(self, url = None) -> None:

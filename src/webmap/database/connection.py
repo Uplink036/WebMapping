@@ -1,5 +1,8 @@
-from webmap.database.constants import AUTH_PASSWORD, AUTH_USERNAME, DATABASE_URI 
 from neo4j import GraphDatabase
+
+from webmap.database.constants import (AUTH_PASSWORD, AUTH_USERNAME,
+                                       DATABASE_URI)
+
 
 def verify_connectivity():
     with GraphDatabase.driver(DATABASE_URI, auth=(AUTH_USERNAME, AUTH_PASSWORD)) as driver:
