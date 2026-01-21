@@ -21,13 +21,13 @@ class Node:
 
     def get_edges(self) -> dict[str, str]:
         return self.edges
-    
+
     def get_number_of_edges(self) -> int:
         return len(self.edges)
 
     def get_website(self) -> str:
-        return self.website 
-    
+        return self.website
+
     def _is_valid(self, website: str) -> bool:
         if website is None:
             return False
