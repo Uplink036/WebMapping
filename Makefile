@@ -17,6 +17,10 @@ compose: ## Start the compose
 stop: ## Stop the compose
 	docker compose down
 
+lint: ## Lint source
+	isort src/
+	black src/
+
 clean: ## Clean the repo 
 	rm -f pytest.xml
 	rm -f coverage.xml
