@@ -1,6 +1,34 @@
 [project]
 name = "WebMapping"
-version = "0.1.0"
+version = "1.0.0"
 authors = [{name="Uplink036"}]
 description = "A simple web mapping application"
 readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "requests",
+    "html5lib", 
+    "bs4",
+    "plotly",
+    "networkx",
+    "numpy",
+    "matplotlib"
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "coverage", 
+    "hypothesis",
+    "responses",
+    "pytest"
+]
+
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/webmap"]

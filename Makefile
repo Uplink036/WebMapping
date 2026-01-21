@@ -2,7 +2,6 @@ build: ## Build the (local) package
 	python3 -m build
 
 install: ## Install the (local) package
-	pip install --user -r requirements.txt
 	pip install -e .
 
 .PHONY: test
