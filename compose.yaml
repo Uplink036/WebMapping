@@ -1,0 +1,9 @@
+services:
+  database:
+    image: neo4j:latest
+    environment:
+        - NEO4J_AUTH=neo4j/root
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    restart: always
