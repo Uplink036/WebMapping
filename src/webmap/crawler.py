@@ -1,17 +1,17 @@
 from .map import plot_nodes
 from .node import Node
-from .scraper import get_HTML_response, get_soup, print_parsed_HTML, get_all_links
+from .scraper import get_HTML_response, get_soup, get_all_links
 from .url_handling import get_name_from_URL
 
 
 class Crawler:
-    def __init__(self, url = None, web_size = 100) -> None:
-        self.starting_url = url
-        self._max_websize = web_size
-        self._websites = {}
+    def __init__(self, url = None, web_size: int = 100) -> None:
+        self.starting_url: str = url
+        self._max_websize: int = web_size
+        self._websites: dict[str, list[str]] = {}
 
 
-    def run(self):
+    def run(self) -> None:
         if self.starting_url is None:
             raise ValueError
     
@@ -31,7 +31,7 @@ class Crawler:
         plot_nodes(self._websites[get_name_from_URL(self.starting_url)])
 
 
-    def _parse_links(self, website_origin, list_with_links):
+    def _parse_links(self, website_origin: str, list_with_links: list[str]) -> list[str]:
         found_urls = []
         for link in list_with_links:
             link_website_name = get_name_from_URL(link)
@@ -46,7 +46,7 @@ class Crawler:
         return found_urls
 
 
-    def _fetch_links(self, url=None):
+    def _fetch_links(self, url: str | None = None) -> list[str]:
         """
         Provided with a url, it will get get all the links on that html page and send them back as a list.
         """
@@ -55,17 +55,17 @@ class Crawler:
         return get_all_links(soup)
     
 
-    def _encounted_website(self, website_name):
+    def _encounted_website(self, website_name: str) -> bool:
         return website_name in self._websites
 
 
-    def _add_website(self, website_name):
+    def _add_website(self, website_name: str) -> None:
         self._websites[website_name] = Node(website_name)
 
 
-    def _add_website_link(self, origin, end):
+    def _add_website_link(self, origin: str, end: str) -> None:
         self._websites[origin].add_edge(self._websites[end])
 
 
-    def _count_websites(self):
+    def _count_websites(self) -> int:
         return len(self._websites)

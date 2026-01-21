@@ -3,7 +3,7 @@ from hypothesis import given, assume
 from hypothesis import strategies as st
 from unittest import mock
 
-from webmap.scraper import get_HTML_response, get_soup, get_all_links, print_parsed_HTML, print_raw_HTML
+from webmap.scraper import get_HTML_response, get_soup, get_all_links, print_response
 
 HTML_EXAMPLE_CONTENT =  """  
                         <div>
@@ -27,14 +27,6 @@ class TestScrapper():
         assert soup is not None
         assert soup.find('p').text == 'lorem'
 
-    def test_print_raw_html(self):
-        mock_html_response = mock.MagicMock()
-        mock_html_response.content = HTML_EXAMPLE_CONTENT
-
-        with mock.patch('builtins.print') as mock_print:
-            print_raw_HTML(mock_html_response)
-            mock_print.assert_called_once()
-
     def test_get_all_links(self):
         html_link_example_content = """  
                             <div>
@@ -47,9 +39,20 @@ class TestScrapper():
         links = get_all_links(soup)
         assert links == ['https://www.google.com', 'https://www.facebook.com']
 
-    def test_print_parsed_HTML(self):
+    def test_print_raw_html(self):
+        mock_html_response = mock.MagicMock()
+        mock_html_response.content = HTML_EXAMPLE_CONTENT
+
         with mock.patch('builtins.print') as mock_print:
-            print_parsed_HTML(HTML_EXAMPLE_CONTENT)
+            print_response(mock_html_response, raw = True)
+            mock_print.assert_called_once()
+
+    def test_print_parsed_HTML(self):
+        mock_html_response = mock.MagicMock()
+        mock_html_response.content = HTML_EXAMPLE_CONTENT
+
+        with mock.patch('builtins.print') as mock_print:
+            print_response(mock_html_response)
             mock_print.assert_called_once()
 
 if __name__ == "__main__":
