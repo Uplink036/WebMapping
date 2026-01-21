@@ -1,23 +1,15 @@
 build: ## Build the (local) package
-	python3 -m build
-
-install: ## Install the (local) package
 	pip install -e .
 
-.PHONY: test
-test: ## Run tests
-	pytest
+install: ## Install the (local) package
+	pip install -e .[dev]
 
-cov: code-coverage ## Run tests with code coverage
+.PHONY: tests
+tests: ## Run tests
+	pytest --junitxml=pytest.xml --cov-report=xml:coverage.xml --cov=src tests/
 
-code-coverage: ## Run tests with code coverage
-	coverage run -m pytest
-
-branch-coverage: ## Run tests with branch coverage
-	coverage run -m --branch pytest
-
-report: ## Generate coverage report
-	coverage report -m --include="src/*"
+report:
+	coverage report -m
 
 # Thanks to Andreas Bauer
 help: ## Show this help
