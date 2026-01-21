@@ -6,7 +6,7 @@ install: ## Install the (local) package
 
 .PHONY: tests
 tests: ## Run tests
-	pytest --cov-report=xml:coverage.xml --cov=src tests/
+	pytest --junitxml=pytest.xml --cov-report=xml:coverage.xml --cov=src tests/
 
 report:
 	coverage report -m

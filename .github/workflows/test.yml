@@ -9,7 +9,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -33,4 +33,3 @@ jobs:
       uses: MishaKav/pytest-coverage-comment@main
       with:
         pytest-xml-coverage-path: ./coverage.xml
-        junitxml-path: ./pytest.xml
