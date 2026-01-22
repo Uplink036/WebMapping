@@ -20,7 +20,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install isort black mypy 
+        pip install .[lint]
+        mypy --install-types
         pip install types-requests
 
     - name: Lint code formatters
