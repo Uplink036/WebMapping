@@ -20,6 +20,7 @@ stop: ## Stop the compose
 lint: ## Lint source
 	isort src/
 	black src/
+	mypy src/
 
 clean: ## Clean the repo 
 	rm -f pytest.xml

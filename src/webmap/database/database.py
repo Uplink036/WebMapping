@@ -1,5 +1,5 @@
-from typing import Any
-from typing import cast
+from typing import Any, cast
+
 import neo4j
 from neo4j import GraphDatabase
 

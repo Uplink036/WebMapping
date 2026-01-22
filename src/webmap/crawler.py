@@ -1,3 +1,5 @@
+from time import sleep
+
 from webmap.database.database import Neo4JGraph, Neo4JStack
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
 from webmap.url_handling import get_name_from_URL
@@ -23,7 +25,7 @@ class Crawler:
             website_name = get_name_from_URL(url)
             if website_name is None:
                 print("Crawler error: URL was not valid")
-                continue 
+                continue
             if not self._graph.in_database(website_name):
                 self._graph.add_node(website_name)
 
@@ -31,6 +33,7 @@ class Crawler:
                 links = self._fetch_links(url)
                 for element in self._parse_links(website_name, links):
                     self._stack.push(element)
+            sleep(0.25)
 
     def _parse_links(
         self, website_origin: str, list_with_links: list[str]

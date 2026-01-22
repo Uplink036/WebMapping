@@ -1,7 +1,9 @@
+from typing import cast
+
 import requests
 from bs4 import BeautifulSoup
 from requests import Response
-from typing import cast
+
 
 def get_HTML_response(url: str) -> Response:
     headers = {
