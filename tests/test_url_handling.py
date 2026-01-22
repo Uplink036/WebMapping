@@ -1,9 +1,11 @@
-import pytest 
-from hypothesis import given, assume
+import pytest
+from hypothesis import assume, given
 from hypothesis import strategies as st
+
 from webmap.url_handling import get_name_from_URL, isValidURL
 
-class TestURLHandling():
+
+class TestURLHandling:
     def test_is_valid_URL(self):
         assert isValidURL("https://www.google.com") == True
         assert isValidURL("http://www.google.com") == True
@@ -23,6 +25,7 @@ class TestURLHandling():
     @given(url=st.text())
     def test_fuzz_get_name_from_URL(self, url):
         get_name_from_URL(url=url)
+
 
 if __name__ == "__main__":
     pytest.main()

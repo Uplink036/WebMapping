@@ -1,5 +1,5 @@
 build: ## Build the (local) package
-	pip install -e .
+	pip install .
 
 install: ## Install the (local) package
 	pip install -e .[dev]
@@ -8,8 +8,26 @@ install: ## Install the (local) package
 tests: ## Run tests
 	pytest --junitxml=pytest.xml --cov-report=xml:coverage.xml --cov=src tests/
 
-report:
+report: ## Report coverage results
 	coverage report -m
+
+compose: ## Start the compose
+	docker compose up
+
+stop: ## Stop the compose
+	docker compose down
+
+lint: ## Lint source
+	isort src/
+	black src/
+	mypy src/
+
+clean: ## Clean the repo 
+	rm -f pytest.xml
+	rm -f coverage.xml
+	rm -f .coverage
+	rm -f .pytest_cache
+	rm -f .hypothesis
 
 # Thanks to Andreas Bauer
 help: ## Show this help
