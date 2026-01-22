@@ -1,14 +1,14 @@
 from typing import Any
-
+from typing import cast
+import neo4j
 from neo4j import GraphDatabase
 
 from webmap.database.connection import verify_connectivity
-from webmap.database.constants import (AUTH_PASSWORD, AUTH_USERNAME,
-                                       DATABASE_URI)
+from webmap.database.constants import AUTH_PASSWORD, AUTH_USERNAME, DATABASE_URI
 
 
 class Database:
-    def __init__(self):
+    def __init__(self) -> None:
         if verify_connectivity() is False:
             raise ConnectionError(
                 "Database error: Could not create connection to database"
@@ -19,13 +19,13 @@ class Database:
 
 
 class StackDB(Database):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def push(self, item: Any) -> None:
         raise NotImplementedError
 
-    def pop(self) -> str:
+    def pop(self) -> str | None:
         raise NotImplementedError
 
     def count(self) -> int:
@@ -33,7 +33,7 @@ class StackDB(Database):
 
 
 class GraphDB(Database):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def add_node(self, website: str) -> bool:
@@ -50,14 +50,14 @@ class GraphDB(Database):
 
 
 class Neo4JStack(StackDB):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def push(self, item: Any) -> None:
         with self._driver.session() as session:
             session.run("CREATE (s:StackItem {value: $item})", item=str(item))
 
-    def pop(self) -> str:
+    def pop(self) -> str | None:
         with self._driver.session() as session:
             result = session.run(
                 "MATCH (s:StackItem) WITH s ORDER BY elementId(s) DESC LIMIT 1 RETURN s.value, elementId(s) as node_id"
@@ -66,7 +66,7 @@ class Neo4JStack(StackDB):
             if not record:
                 return None
 
-            value = record["s.value"]
+            value: str = record["s.value"]
             node_id = record["node_id"]
 
             session.run(
@@ -78,11 +78,15 @@ class Neo4JStack(StackDB):
     def count(self) -> int:
         with self._driver.session() as session:
             result = session.run("MATCH (s:StackItem) RETURN count(s) as count")
-            return result.single()["count"]
+            record = result.single()
+            if not record:
+                return 0
+            count: int = record["count"]
+            return count
 
 
 class Neo4JGraph(GraphDB):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def add_node(self, website: str) -> bool:
@@ -109,7 +113,11 @@ class Neo4JGraph(GraphDB):
     def count(self) -> int:
         with self._driver.session() as session:
             result = session.run("MATCH (w:Website) RETURN count(w) as count")
-            return result.single()["count"]
+            record = result.single()
+            if not record:
+                return 0
+            count: int = record["count"]
+            return count
 
     def in_database(self, website: str) -> bool:
         with self._driver.session() as session:

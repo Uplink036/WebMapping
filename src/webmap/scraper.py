@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 from requests import Response
+from typing import cast
 
-
-def get_HTML_response(url) -> Response:
+def get_HTML_response(url: str) -> Response:
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"
     }
@@ -17,14 +17,14 @@ def get_soup(html_response: Response) -> BeautifulSoup:
 
 
 def get_all_links(soup: BeautifulSoup) -> list[str]:
-    links = [link.get("href") for link in soup.find_all("a")]
+    links = [str(link.get("href")) for link in soup.find_all("a")]
     return links
 
 
-def print_response(response: Response, raw: False = False) -> None:
-    raw = response.content
-    if not raw:
-        soup = BeautifulSoup(raw, "html5lib")
+def print_response(response: Response, raw: bool = False) -> None:
+    content = response.content
+    if raw is False:
+        soup = BeautifulSoup(content, "html5lib")
         print(soup.prettify())
     else:
-        print(raw)
+        print(content)

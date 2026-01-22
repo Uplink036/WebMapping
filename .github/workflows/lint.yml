@@ -20,9 +20,14 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install isort black
+        pip install isort black mypy 
+        pip install types-requests
 
-    - name: Test with pytest
+    - name: Lint code formatters
       run: |
         isort --check src/ && \
         black --check src/
+
+    - name: Lint static analysis
+      run: |
+        mypy src/

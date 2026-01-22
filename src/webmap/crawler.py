@@ -1,13 +1,11 @@
 from webmap.database.database import Neo4JGraph, Neo4JStack
-from webmap.map import plot_nodes
-from webmap.node import Node
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
 from webmap.url_handling import get_name_from_URL
 
 
 class Crawler:
-    def __init__(self, url=None) -> None:
-        self.starting_url: str = url
+    def __init__(self, url: str | None = None) -> None:
+        self.starting_url: str | None = url
         self._graph: Neo4JGraph = Neo4JGraph()
         self._stack: Neo4JStack = Neo4JStack()
 
@@ -20,8 +18,12 @@ class Crawler:
         while self._stack.count() > 0:
             url = self._stack.pop()
             if url is None:
-                raise ValueError("Crawler error: Stack returned unexpected value")
+                print("Crawler error: Stack returned unexpected value")
+                continue
             website_name = get_name_from_URL(url)
+            if website_name is None:
+                print("Crawler error: URL was not valid")
+                continue 
             if not self._graph.in_database(website_name):
                 self._graph.add_node(website_name)
 
@@ -50,6 +52,10 @@ class Crawler:
         """
         Provided with a url, it will get get all the links on that html page and send them back as a list.
         """
+        if url is None:
+            return []
         html_response = get_HTML_response(url)
+        if html_response is None:
+            return []
         soup = get_soup(html_response)
         return get_all_links(soup)
