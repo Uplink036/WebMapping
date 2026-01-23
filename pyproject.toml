@@ -14,7 +14,9 @@ dependencies = [
     "numpy",
     "matplotlib",
     "neo4j",
-    "dotenv"
+    "dotenv",
+    "fastapi",
+    "uvicorn"
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
