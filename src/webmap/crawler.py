@@ -30,10 +30,9 @@ class Crawler:
                     continue
                 if not self._graph.in_database(website_name):
                     self._graph.add_node(website_name)
-                if self._graph.in_database(website_name):
-                    links = self._fetch_links(url)
-                    for element in self._parse_links(website_name, links):
-                        self._stack.push(element)
+                links = self._fetch_links(url)
+                for element in self._parse_links(website_name, links):
+                    self._stack.push(element)
             sleep(self._control.get_time())
 
     def _parse_links(
