@@ -3,7 +3,6 @@ import time
 import uvicorn
 from threading import Thread
 from webmap import Crawler
-from webmap.api import set_crawler
 from webmap.database.database import Neo4JControl
 
 URL = "https://scrapeme.live/shop/"
