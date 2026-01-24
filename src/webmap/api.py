@@ -4,7 +4,7 @@ from typing import Dict, Union
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
 
-from webmap.database.database import Neo4JControl, Neo4JGraph, Neo4JStack
+from webmap.database import Neo4JControl, Neo4JGraph, Neo4JStack
 
 app = FastAPI(title="WebMapping API")
 
