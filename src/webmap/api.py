@@ -1,30 +1,25 @@
+import time
+from typing import Dict, Union
+
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse
-import time
 
-from webmap.database.database import Neo4JGraph, Neo4JStack, Neo4JControl
-
+from webmap.database.database import Neo4JControl, Neo4JGraph, Neo4JStack
 
 app = FastAPI(title="WebMapping API")
-crawler_instance = None
-
-
-def set_crawler(crawler):
-    global crawler_instance
-    crawler_instance = crawler
 
 
 @app.get("/", response_class=HTMLResponse)
-async def dashboard():
+async def dashboard() -> str:
     stack = Neo4JStack()
     graph = Neo4JGraph()
     control = Neo4JControl()
-    
+
     stack_count = stack.count()
     websites_count = graph.count()
     status = control.get_status()
     sleep_time = control.get_time()
-    
+
     html = f"""
     <!DOCTYPE html>
     <html>
@@ -76,36 +71,35 @@ async def dashboard():
 
 
 @app.get("/api/stats")
-async def get_stats():
+async def get_stats() -> Dict[str, int]:
     stack = Neo4JStack()
     graph = Neo4JGraph()
-    
-    return {
-        "stack_count": stack.count(),
-        "websites_count": graph.count()
-    }
+    return {"stack_count": stack.count(), "websites_count": graph.count()}
+
 
 @app.get("/api/set_status")
-async def set_crawler_status(status: bool = Query(...)):
+async def set_crawler_status(status: bool = Query(...)) -> Dict[str, str]:
     control = Neo4JControl()
     control.set_status(status)
     return {"message": f"Crawler status set to {status}"}
 
 
 @app.get("/api/set_crawler_sleep")
-async def set_crawler_sleep(sleep_time: float = Query(..., alias="time")):
+async def set_crawler_sleep(
+    sleep_time: float = Query(..., alias="time")
+) -> Dict[str, str]:
     control = Neo4JControl()
     control.set_time(sleep_time)
     return {"message": f"Crawler sleep time set to {sleep_time}"}
 
 
 @app.get("/api/get_status")
-async def get_crawler_status():
+async def get_crawler_status() -> Dict[str, bool]:
     control = Neo4JControl()
     return {"status": control.get_status()}
 
 
 @app.get("/api/get_sleep_time")
-async def get_crawler_sleep_time():
+async def get_crawler_sleep_time() -> Dict[str, Union[float, int]]:
     control = Neo4JControl()
     return {"sleep_time": control.get_time()}

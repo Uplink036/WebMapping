@@ -24,7 +24,7 @@ class ControlDB(Database):
 
     def set_status(self, status: bool) -> None:
         raise NotImplementedError
-    
+
     def get_status(self) -> bool:
         raise NotImplementedError
 
@@ -33,6 +33,7 @@ class ControlDB(Database):
 
     def get_time(self) -> float:
         raise NotImplementedError
+
 
 class StackDB(Database):
     def __init__(self) -> None:
@@ -109,7 +110,7 @@ class Neo4JControl(ControlDB):
         with self._driver.session() as session:
             session.run(
                 "MERGE (c:Control {id: 'crawler'}) SET c.running = $status",
-                status=status
+                status=status,
             )
 
     def get_status(self) -> bool:
@@ -120,13 +121,13 @@ class Neo4JControl(ControlDB):
             record = result.single()
             if not record:
                 return False
-            return record["status"] == True
+            status: bool = record["status"] is True
+            return status
 
     def set_time(self, time: float) -> None:
         with self._driver.session() as session:
             session.run(
-                "MERGE (c:Control {id: 'crawler'}) SET c.last_update = $time",
-                time=time
+                "MERGE (c:Control {id: 'crawler'}) SET c.last_update = $time", time=time
             )
 
     def get_time(self) -> float:

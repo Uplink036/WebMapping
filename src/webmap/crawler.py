@@ -1,6 +1,6 @@
 from time import sleep
 
-from webmap.database.database import Neo4JGraph, Neo4JStack, Neo4JControl
+from webmap.database.database import Neo4JControl, Neo4JGraph, Neo4JStack
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
 from webmap.url_handling import get_name_from_URL
 
