@@ -1,6 +1,6 @@
 from time import sleep
 
-from webmap.database.database import Neo4JGraph, Neo4JStack
+from webmap.database.database import Neo4JControl, Neo4JGraph, Neo4JStack
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
 from webmap.url_handling import get_name_from_URL
 
@@ -10,6 +10,7 @@ class Crawler:
         self.starting_url: str | None = url
         self._graph: Neo4JGraph = Neo4JGraph()
         self._stack: Neo4JStack = Neo4JStack()
+        self._control: Neo4JControl = Neo4JControl()
 
     def run(self) -> None:
         if self._stack.count() == 0:
@@ -17,23 +18,23 @@ class Crawler:
                 raise ValueError
             self._stack.push(self.starting_url)
 
-        while self._stack.count() > 0:
-            url = self._stack.pop()
-            if url is None:
-                print("Crawler error: Stack returned unexpected value")
-                continue
-            website_name = get_name_from_URL(url)
-            if website_name is None:
-                print("Crawler error: URL was not valid")
-                continue
-            if not self._graph.in_database(website_name):
-                self._graph.add_node(website_name)
-
-            if self._graph.in_database(website_name):
-                links = self._fetch_links(url)
-                for element in self._parse_links(website_name, links):
-                    self._stack.push(element)
-            sleep(0.25)
+        while self._control.get_status():
+            if self._stack.count() > 0:
+                url = self._stack.pop()
+                if url is None:
+                    print("Crawler error: Stack returned unexpected value")
+                    continue
+                website_name = get_name_from_URL(url)
+                if website_name is None:
+                    print("Crawler error: URL was not valid")
+                    continue
+                if not self._graph.in_database(website_name):
+                    self._graph.add_node(website_name)
+                if self._graph.in_database(website_name):
+                    links = self._fetch_links(url)
+                    for element in self._parse_links(website_name, links):
+                        self._stack.push(element)
+            sleep(self._control.get_time())
 
     def _parse_links(
         self, website_origin: str, list_with_links: list[str]
