@@ -16,7 +16,8 @@ dependencies = [
     "neo4j",
     "dotenv",
     "fastapi",
-    "uvicorn"
+    "uvicorn",
+    "selenium"
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]

@@ -1,4 +1,5 @@
 from time import sleep
+from typing import Callable, List
 
 from webmap.database import Neo4JControl, Neo4JGraph, Neo4JStack
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
@@ -11,6 +12,11 @@ class Crawler:
         self._graph: Neo4JGraph = Neo4JGraph()
         self._stack: Neo4JStack = Neo4JStack()
         self._control: Neo4JControl = Neo4JControl()
+        self._plugins: List[Callable[[str], None]] = []
+
+    def add(self, func: Callable[[str], None]) -> None:
+        """Add a function to be applied to each URL."""
+        self._plugins.append(func)
 
     def run(self) -> None:
         if self._stack.count() == 0:
@@ -30,6 +36,12 @@ class Crawler:
                     continue
                 if not self._graph.in_database(website_name):
                     self._graph.add_node(website_name)
+                for plugin in self._plugins:
+                    try:
+                        plugin(url)
+                    except Exception as e:
+                        print(f"Plugin error for {url}: {e}")
+                
                 links = self._fetch_links(url)
                 for element in self._parse_links(website_name, links):
                     self._stack.push(element)
