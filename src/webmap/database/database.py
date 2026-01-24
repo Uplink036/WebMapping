@@ -70,9 +70,19 @@ class Neo4JStack(StackDB):
     def __init__(self) -> None:
         super().__init__()
 
-    def push(self, item: Any) -> None:
+    def _item_exists(self, item: str) -> bool:
         with self._driver.session() as session:
-            session.run("CREATE (s:StackItem {value: $item})", item=str(item))
+            result = session.run(
+                "MATCH (s) WHERE (s:StackItem OR s:CompletedStackItem) AND s.value = $item RETURN s",
+                item=item,
+            )
+            return result.single() is not None
+
+    def push(self, item: Any) -> None:
+        item_str = str(item)
+        if not self._item_exists(item_str):
+            with self._driver.session() as session:
+                session.run("CREATE (s:StackItem {value: $item})", item=item_str)
 
     def pop(self) -> str | None:
         with self._driver.session() as session:
