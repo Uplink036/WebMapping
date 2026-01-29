@@ -2,7 +2,9 @@ build: ## Build the (local) package
 	pip install .
 
 install: ## Install the (local) package
-	pip install -e .[dev]
+	pip install -e .[all]
+	mypy --install-types
+	pip install types-requests
 
 .PHONY: tests
 tests: ## Run tests
