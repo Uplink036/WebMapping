@@ -5,6 +5,7 @@ from webmap.screenshot.database import ScreenshotDB
 
 SERVER = "http://selenium:4444/wd/hub"
 
+
 class ScreenshotCapture:
     def __init__(self) -> None:
         self.db = ScreenshotDB()
@@ -17,12 +18,9 @@ class ScreenshotCapture:
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
-        
+
         # Connect to remote Selenium standalone container
-        self.driver = webdriver.Remote(
-            command_executor=SERVER,
-            options=options
-        )
+        self.driver = webdriver.Remote(command_executor=SERVER, options=options)
 
     def take_screenshot(self, url: str) -> bytes | None:
         """Take screenshot of URL and return as bytes."""

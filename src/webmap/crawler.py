@@ -38,13 +38,13 @@ class Crawler:
                     continue
                 if not self._graph.in_database(website_name):
                     self._graph.add_node(website_name)
-                
+
                 for plugin in self._plugins:
                     try:
                         plugin(url)
                     except Exception as e:
                         self._status.log_status(f"Plugin error for {url}: {e}")
-                
+
                 links = self._fetch_links(url)
                 for element in self._parse_links(website_name, links):
                     self._stack.push(element)

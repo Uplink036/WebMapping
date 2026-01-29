@@ -1,6 +1,6 @@
+import random
 import time
 from typing import Dict, Union
-import random
 
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse, Response
@@ -147,22 +147,22 @@ async def screenshots_page() -> str:
 
 
 @app.get("/api/random_screenshot")
-async def get_random_screenshot():
+async def get_random_screenshot() -> Response:
     """Get a random screenshot from the database."""
     db = ScreenshotDB()
-    
+
     # Get all screenshots (simplified - in production you'd want pagination)
     with db._driver.session() as session:
         result = session.run("MATCH (s:Screenshot) RETURN s.url as url")
         urls = [record["url"] for record in result]
-    
+
     if not urls:
         return Response(content="No screenshots available", status_code=404)
-    
+
     # Pick random URL and get its screenshot
     random_url = random.choice(urls)
     screenshot_data = db.get_screenshot(random_url)
-    
+
     if screenshot_data:
         return Response(content=screenshot_data, media_type="image/png")
     else:
