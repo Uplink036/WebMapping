@@ -1,10 +1,12 @@
+import random
 import time
 from typing import Dict, Union
 
 from fastapi import FastAPI, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 
 from webmap.database import Neo4JControl, Neo4JGraph, Neo4JStack
+from webmap.screenshot.database import ScreenshotDB
 
 app = FastAPI(title="WebMapping API")
 
@@ -103,3 +105,65 @@ async def get_crawler_status() -> Dict[str, bool]:
 async def get_crawler_sleep_time() -> Dict[str, Union[float, int]]:
     control = Neo4JControl()
     return {"sleep_time": control.get_time()}
+
+
+@app.get("/screenshots", response_class=HTMLResponse)
+async def screenshots_page() -> str:
+    """Simple page to view a random screenshot."""
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Screenshots</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
+            img { max-width: 80%; border: 1px solid #ccc; margin: 20px 0; }
+            button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h1>Website Screenshots</h1>
+        <button onclick="loadRandomScreenshot()">Load Random Screenshot</button>
+        <div id="screenshot-container">
+            <p>Click the button to load a random screenshot</p>
+        </div>
+        <script>
+            function loadRandomScreenshot() {
+                fetch('/api/random_screenshot')
+                    .then(response => {
+                        if (response.ok) {
+                            const container = document.getElementById('screenshot-container');
+                            container.innerHTML = '<img src="/api/random_screenshot" alt="Random Screenshot">';
+                        } else {
+                            document.getElementById('screenshot-container').innerHTML = '<p>No screenshots available</p>';
+                        }
+                    });
+            }
+        </script>
+    </body>
+    </html>
+    """
+    return html
+
+
+@app.get("/api/random_screenshot")
+async def get_random_screenshot() -> Response:
+    """Get a random screenshot from the database."""
+    db = ScreenshotDB()
+
+    # Get all screenshots (simplified - in production you'd want pagination)
+    with db._driver.session() as session:
+        result = session.run("MATCH (s:Screenshot) RETURN s.url as url")
+        urls = [record["url"] for record in result]
+
+    if not urls:
+        return Response(content="No screenshots available", status_code=404)
+
+    # Pick random URL and get its screenshot
+    random_url = random.choice(urls)
+    screenshot_data = db.get_screenshot(random_url)
+
+    if screenshot_data:
+        return Response(content=screenshot_data, media_type="image/png")
+    else:
+        return Response(content="Screenshot not found", status_code=404)

@@ -4,16 +4,23 @@ import uvicorn
 from threading import Thread
 from webmap import Crawler
 from webmap.database import Neo4JControl
+from webmap.screenshot import ScreenshotCapture
 
 URL = "https://scrapeme.live/shop/"
 
+def take_screenshot(url: str) -> None:
+    capture = ScreenshotCapture()
+    capture.capture_and_save(url)
+    capture.close()
+
 crawler = Crawler(URL)
+crawler.add(take_screenshot)
 control = Neo4JControl()
 
 if __name__ == "__main__":
     control.set_status(True)
     control.set_time(0.2)
-    crawler_thread = Thread(target=lambda: Crawler(URL).run())
+    crawler_thread = Thread(target=lambda: crawler.run())
     crawler_thread.start()
     
     try:

@@ -10,6 +10,7 @@ services:
     command: sleep infinity
     depends_on:
       - database
+      - selenium
     networks:
       - webmap-network
 
@@ -25,8 +26,19 @@ services:
     networks:
       - webmap-network
 
+  selenium:
+    image: selenium/standalone-chrome
+    volumes:
+      - /dev/shm:/dev/shm 
+      - chrome_profiles:/tmp/chrome
+    ports:
+      - 4444:4444
+    networks:
+      - webmap-network
+
 volumes:
   neo4j_data:
+  chrome_profiles:
 
 networks:
   webmap-network:
