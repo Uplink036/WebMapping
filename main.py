@@ -20,7 +20,7 @@ control = Neo4JControl()
 if __name__ == "__main__":
     control.set_status(True)
     control.set_time(0.2)
-    crawler_thread = Thread(target=lambda: Crawler(URL).run())
+    crawler_thread = Thread(target=lambda: crawler.run())
     crawler_thread.start()
     
     try:
