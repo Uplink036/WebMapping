@@ -1,4 +1,5 @@
-from webmap.screenshot.capture import ScreenshotCapture
-from webmap.screenshot.database import ScreenshotDB
+from webmap.boundingbox.bbox import BBox
+from webmap.boundingbox.capture import BoundingBoxCapture
+from webmap.boundingbox.database import BoundingBoxDB
 
-__all__ = ["ScreenshotCapture", "ScreenshotDB"]
+__all__ = ["BoundingBoxCapture", "BoundingBoxDB", "BBox"]
