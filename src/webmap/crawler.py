@@ -3,7 +3,7 @@ from typing import Callable, List
 
 from webmap.database import Neo4JControl, Neo4JGraph, Neo4JStack, StatusDB
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
-from webmap.url_handling import get_name_from_URL
+from webmap.url_handling import isValid
 
 
 class Crawler:
@@ -32,12 +32,13 @@ class Crawler:
                 if url is None:
                     self._status.log_status("Stack returned unexpected value")
                     continue
-                website_name = get_name_from_URL(url)
-                if website_name is None:
+
+                if not isValid(url):
                     self._status.log_status(f"Invalid URL: {url}")
                     continue
-                if not self._graph.in_database(website_name):
-                    self._graph.add_node(website_name)
+
+                if not self._graph.in_database(url):
+                    self._graph.add_node(url)
 
                 for plugin in self._plugins:
                     try:
@@ -46,7 +47,7 @@ class Crawler:
                         self._status.log_status(f"Plugin error for {url}: {e}")
 
                 links = self._fetch_links(url)
-                for element in self._parse_links(website_name, links):
+                for element in self._parse_links(url, links):
                     self._stack.push(element)
             sleep(self._control.get_time())
 
@@ -55,15 +56,14 @@ class Crawler:
     ) -> list[str]:
         found_urls = []
         for link in list_with_links:
-            link_website_name = get_name_from_URL(link)
-            if link_website_name is None:
+            if not isValid(link):
                 continue
 
             found_urls.append(link)
-            if not self._graph.in_database(link_website_name):
-                self._graph.add_node(link_website_name)
+            if not self._graph.in_database(link):
+                self._graph.add_node(link)
 
-            self._graph.add_edge(website_origin, link_website_name)
+            self._graph.add_edge(website_origin, link)
         return found_urls
 
     def _fetch_links(self, url: str | None = None) -> list[str]:

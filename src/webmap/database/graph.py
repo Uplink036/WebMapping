@@ -5,7 +5,7 @@ class GraphDB(Database):
     def __init__(self) -> None:
         super().__init__()
 
-    def add_node(self, website: str) -> bool:
+    def add_node(self, url: str) -> bool:
         raise NotImplementedError
 
     def add_edge(self, from_website: str, to_website: str) -> bool:
@@ -14,7 +14,7 @@ class GraphDB(Database):
     def count(self) -> int:
         raise NotImplementedError
 
-    def in_database(self, website: str) -> bool:
+    def in_database(self, url: str) -> bool:
         raise NotImplementedError
 
 
@@ -22,19 +22,17 @@ class Neo4JGraph(GraphDB):
     def __init__(self) -> None:
         super().__init__()
 
-    def add_node(self, website: str) -> bool:
+    def add_node(self, url: str) -> bool:
         with self._driver.session() as session:
-            result = session.run(
-                "MERGE (w:Website {name: $name}) RETURN w", name=website
-            )
+            result = session.run("MERGE (w:Website {url: $url}) RETURN w", url=url)
             return result.single() is not None
 
     def add_edge(self, from_website: str, to_website: str) -> bool:
         with self._driver.session() as session:
             result = session.run(
                 """
-                MATCH (a:Website {name: $from_site})
-                MATCH (b:Website {name: $to_site})
+                MATCH (a:Website {url: $from_site})
+                MATCH (b:Website {url: $to_site})
                 MERGE (a)-[:LINKS_TO]->(b)
                 RETURN a, b
             """,
@@ -52,9 +50,7 @@ class Neo4JGraph(GraphDB):
             count: int = record["count"]
             return count
 
-    def in_database(self, website: str) -> bool:
+    def in_database(self, url: str) -> bool:
         with self._driver.session() as session:
-            result = session.run(
-                "MATCH (w:Website {name: $name}) RETURN w", name=website
-            )
+            result = session.run("MATCH (w:Website {url: $url}) RETURN w", url=url)
             return result.single() is not None

@@ -2,19 +2,19 @@ import pytest
 from hypothesis import assume, given
 from hypothesis import strategies as st
 
-from webmap.url_handling import get_name_from_URL, isValidURL
+from webmap.url_handling import get_name_from_URL, isValid
 
 
 class TestURLHandling:
     def test_is_valid_URL(self):
-        assert isValidURL("https://www.google.com") == True
-        assert isValidURL("http://www.google.com") == True
-        assert isValidURL("www.google.com") == False
-        assert isValidURL(None) == False
+        assert isValid("https://www.google.com") == True
+        assert isValid("http://www.google.com") == True
+        assert isValid("www.google.com") == False
+        assert isValid(None) == False
 
     @given(url=st.text())
     def test_fuzz_isValidURL(self, url):
-        isValidURL(url=url)
+        isValid(url=url)
 
     def test_get_name_from_URL(self):
         assert get_name_from_URL("https://www.google.com") == "www.google.com"

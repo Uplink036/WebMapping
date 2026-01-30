@@ -4,22 +4,21 @@ import uvicorn
 from threading import Thread
 from webmap import Crawler
 from webmap.database import Neo4JControl
-from webmap.screenshot import ScreenshotCapture
+from webmap.boundingbox import BoundingBoxCapture
 
 URL = "https://scrapeme.live/shop/"
 
-def take_screenshot(url: str) -> None:
-    capture = ScreenshotCapture()
+def capture_bounding_boxes(url: str) -> None:
+    capture = BoundingBoxCapture()
     capture.capture_and_save(url)
-    capture.close()
 
 crawler = Crawler(URL)
-crawler.add(take_screenshot)
+crawler.add(capture_bounding_boxes)
 control = Neo4JControl()
 
 if __name__ == "__main__":
     control.set_status(True)
-    control.set_time(0.2)
+    control.set_time(1)
     crawler_thread = Thread(target=lambda: crawler.run())
     crawler_thread.start()
     
