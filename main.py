@@ -11,7 +11,6 @@ URL = "https://scrapeme.live/shop/"
 def capture_bounding_boxes(url: str) -> None:
     capture = BoundingBoxCapture()
     capture.capture_and_save(url)
-    capture.close()
 
 crawler = Crawler(URL)
 crawler.add(capture_bounding_boxes)

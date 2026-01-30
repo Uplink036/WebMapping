@@ -15,16 +15,16 @@ class BoundingBoxDB(Database):
         with self._driver.session() as session:
             screenshot_b64 = base64.b64encode(screenshot_data).decode("utf-8")
 
-            website_name = url
+            website = url
 
             session.run(
                 """MERGE (p:Page {url: $url}) 
                    SET p.timestamp = datetime()
                    WITH p
-                   MATCH (w:Website {name: $website_name})
+                   MATCH (w:Website {url: $website})
                    MERGE (w)-[:HAS_PAGE]->(p)""",
                 url=url,
-                website_name=website_name,
+                website=website,
             )
 
             result = session.run(
@@ -43,15 +43,15 @@ class BoundingBoxDB(Database):
     def save_bounding_boxes(self, url: str, bounding_boxes: list[BBox]) -> bool:
         """Save bounding box data as BoundingBox nodes."""
         with self._driver.session() as session:
-            website_name = url
+            website = url
             session.run(
                 """MERGE (p:Page {url: $url}) 
                    SET p.timestamp = datetime()
                    WITH p
-                   MATCH (w:Website {name: $website_name})
+                   MATCH (w:Website {url: $website})
                    MERGE (w)-[:HAS_PAGE]->(p)""",
                 url=url,
-                website_name=website_name,
+                website=website,
             )
 
             for i, bbox in enumerate(bounding_boxes):

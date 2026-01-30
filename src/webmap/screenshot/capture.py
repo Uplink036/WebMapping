@@ -42,3 +42,6 @@ class ScreenshotCapture:
     def close(self) -> None:
         """Close the webdriver."""
         self.driver.quit()
+
+    def __del__(self) -> None:
+        self.close()
