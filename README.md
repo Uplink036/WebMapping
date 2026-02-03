@@ -2,7 +2,9 @@
 
 ## Introduction
 
-A web mapping application that discovers and maps connections between websites. Starting from a given URL, it crawls outward to find linked websites and stores the relationships in a Neo4j graph database. Each website becomes a node in the graph, with edges representing the connections between them.
+A comprehensive web mapping application that discovers and maps connections between websites. Starting from a given URL, it crawls outward to find linked websites. It can use plugins that can captures screenshots, detects bounding boxes, and it stores all such information in a Neo4j database. 
+
+The application includes a web-based dashboard for monitoring crawling progress and viewing captured screenshots.
 
 ## Prerequisites
 
@@ -44,7 +46,6 @@ make install
 ```
 
 This installs the package with development dependencies including testing and linting tools.
-
 ## Usage
 
 ### Basic Usage
@@ -59,6 +60,40 @@ crawler = Crawler("https://example.com")
 crawler.run()
 ```
 
+### Plugin Usage
+
+The crawler supports plugins for additional functionality:
+
+```python
+from webmap import Crawler
+from webmap.boundingbox import BoundingBoxCapture
+
+# Initialize crawler with starting URL
+crawler = Crawler("https://example.com")
+
+# Add bounding box capture plugin
+def capture_bounding_boxes(url: str) -> None:
+    capture = BoundingBoxCapture()
+    capture.capture_and_save(url)
+
+crawler.add(capture_bounding_boxes)
+
+# Start crawling with plugins
+crawler.run()
+```
+
+### Web Dashboard
+
+The application includes a web-based dashboard accessible at `http://localhost:8000` when running the main application. The dashboard provides real-time crawling statistics, crawler control, and screenshot viewing capabilities.
+
+### Command Line Tools
+
+The `tools/` directory contains utility scripts:
+
+- `boundingbox.py`: Capture bounding box screenshots for a given URL
+- `save_screenshot.py`: Retrieve and save screenshots from the database
+- `clean_database.py`: Database maintenance utilities
+
 See [main.py](./main.py) for a complete example.
 
 ### DevContainers
@@ -69,14 +104,13 @@ This project includes a devcontainer configuration for development in VS Code wi
 
 ```
 src/webmap/
-├── __init__.py          # Package initialization
-├── crawler.py           # Main crawling logic
-├── scraper.py          # HTML parsing and link extraction
-├── url_handling.py     # URL processing utilities
-└── database/           # Neo4j database integration
-    ├── connection.py   # Database connection management
-    ├── database.py     # Graph operations and stack management
-    └── constants.py    # Database configuration constants
+├── *.py                    # Main functionality
+├── screenshot/             # Screenshot capture functionality
+│   └── *.py
+├── boundingbox/            # Bounding box detection and capture
+│   └── *.py
+└── database/               # Neo4j database integration
+    └── *.py
 ```
 
 ## License
