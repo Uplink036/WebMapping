@@ -113,6 +113,10 @@ src/webmap/
     └── *.py
 ```
 
+## Contributions
+
+Allowed to add anything you want, please follow resonable standards and the ones found in [docs](./docs/).
+
 ## License
 
 **Author**: Uplink036
