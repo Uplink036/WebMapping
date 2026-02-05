@@ -23,10 +23,13 @@ class ScreenshotDB(Database):
         with self._driver.session() as session:
             if screenshot_type != "clean":
                 result = session.run(
-                    f"MATCH (s:Screenshot) WHERE s.url = \"{url}\" AND s.type = \"{screenshot_type}\" RETURN s.data as data"
+                    f'MATCH (s:Screenshot) WHERE s.url = "{url}" AND s.type = "{screenshot_type}" RETURN s.data as data'
                 )
             else:
-                result = session.run("MATCH (s:Screenshot {url: $url}) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.data as data", url=url)
+                result = session.run(
+                    "MATCH (s:Screenshot {url: $url}) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.data as data",
+                    url=url,
+                )
 
             record = result.single()
             if record and record["data"]:

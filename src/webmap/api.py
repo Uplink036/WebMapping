@@ -1,6 +1,6 @@
 import random
 import time
-from typing import Dict, Union, List, Callable
+from typing import Callable, Dict, List, Union
 
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse, Response
@@ -13,9 +13,11 @@ app = FastAPI(title="WebMapping API")
 
 plugin_sections: List[Callable[[], str]] = []
 
+
 def register_plugin_section(section_func: Callable[[], str]) -> None:
     """Register a plugin section for the dashboard."""
     plugin_sections.append(section_func)
+
 
 class URLRequest(BaseModel):
     url: str
@@ -124,21 +126,25 @@ async def get_crawler_sleep_time() -> Dict[str, Union[float, int]]:
 
 
 @app.get("/api/random_screenshot")
-async def get_random_screenshot(
-    screenshot_type: str = Query("clean")
-) -> Response:
+async def get_random_screenshot(screenshot_type: str = Query("clean")) -> Response:
     """Get a random screenshot from the database."""
     db = ScreenshotDB()
 
     with db._driver.session() as session:
         if screenshot_type == "bbox":
-            result = session.run("MATCH (s:Screenshot {type: 'bbox'}) RETURN s.url as url")
+            result = session.run(
+                "MATCH (s:Screenshot {type: 'bbox'}) RETURN s.url as url"
+            )
         else:
-            result = session.run("MATCH (s:Screenshot) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.url as url")
+            result = session.run(
+                "MATCH (s:Screenshot) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.url as url"
+            )
         urls = [record["url"] for record in result]
 
     if not urls:
-        return Response(content=f"No {screenshot_type} screenshots available", status_code=404)
+        return Response(
+            content=f"No {screenshot_type} screenshots available", status_code=404
+        )
 
     random_url = random.choice(urls)
     screenshot_data = db.get_screenshot(random_url, screenshot_type)
@@ -148,15 +154,18 @@ async def get_random_screenshot(
     else:
         return Response(content="Screenshot not found", status_code=404)
 
+
 # Register plugin sections
 try:
     from webmap.screenshot.web import screenshot_section
+
     register_plugin_section(screenshot_section)
 except ImportError:
     pass
 
 try:
     from webmap.boundingbox.web import boundingbox_section
+
     register_plugin_section(boundingbox_section)
 except ImportError:
     pass

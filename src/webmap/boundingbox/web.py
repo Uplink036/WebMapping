@@ -1,8 +1,9 @@
 """Web interface for bounding box plugin."""
 
+
 def boundingbox_section() -> str:
     """Generate HTML section for bounding box functionality."""
-    return '''
+    return """
     <div class="plugin-section">
         <h2>Bounding Box Screenshots</h2>
         <button onclick="loadRandomScreenshot('bbox')">Load Random Bbox Screenshot</button>
@@ -49,4 +50,4 @@ def boundingbox_section() -> str:
             }
         </script>
     </div>
-    '''
+    """

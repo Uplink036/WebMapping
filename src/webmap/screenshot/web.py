@@ -1,8 +1,9 @@
 """Web interface for screenshot plugin."""
 
+
 def screenshot_section() -> str:
     """Generate HTML section for screenshot functionality."""
-    return '''
+    return """
     <div class="plugin-section">
         <h2>Clean Screenshots</h2>
         <button onclick="loadRandomScreenshot('clean')">Load Random Clean Screenshot</button>
@@ -24,4 +25,4 @@ def screenshot_section() -> str:
             }
         </script>
     </div>
-    '''
+    """
