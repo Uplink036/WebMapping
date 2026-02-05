@@ -81,6 +81,7 @@ crawler.add(capture_bounding_boxes)
 # Start crawling with plugins
 crawler.run()
 ```
+Note, if you want to be able to see these tings on the webpage as well, you will have to write a "plugin" web. You can see how that is done in screenshot and boungingbox, for examples. 
 
 ### Web Dashboard
 
