@@ -18,12 +18,19 @@ class ScreenshotDB(Database):
             )
             return result.single() is not None
 
-    def get_screenshot(self, url: str) -> bytes | None:
+    def get_screenshot(self, url: str, screenshot_type: str = "clean") -> bytes | None:
         """Retrieve screenshot data from database."""
         with self._driver.session() as session:
-            result = session.run(
-                "MATCH (s:Screenshot {url: $url}) RETURN s.data as data", url=url
-            )
+            if screenshot_type != "clean":
+                result = session.run(
+                    f'MATCH (s:Screenshot) WHERE s.url = "{url}" AND s.type = "{screenshot_type}" RETURN s.data as data'
+                )
+            else:
+                result = session.run(
+                    "MATCH (s:Screenshot {url: $url}) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.data as data",
+                    url=url,
+                )
+
             record = result.single()
             if record and record["data"]:
                 return base64.b64decode(record["data"])
