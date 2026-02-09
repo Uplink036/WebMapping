@@ -100,7 +100,6 @@ class BoundingBoxDB(Database):
                 return base64.b64decode(record["data"])
             return None
 
-
     def get_bounding_boxes(self, url: str) -> list[BBox]:
         """Retrieve BoundingBox nodes for a page."""
         with self._driver.session() as session:
