@@ -95,6 +95,16 @@ class BoundingBoxCapture:
         except Exception as e:
             print(f"BoundingBox Error: getting all buttons {url}: {e}")
             return []
+        
+    def get_all_by_xpath(self, url: str, x_string) -> list[WebElement]:
+        if url is not self._loaded_page:
+            self.load_page(url)
+        try:
+            buttons = self.driver.find_elements(By.XPATH, x_string)
+            return buttons
+        except Exception as e:
+            print(f"BoundingBox Error: getting all by x path {url}: {e}")
+            return []
 
     def get_bbox(self, element: WebElement) -> BBox:
         location = element.location
@@ -111,9 +121,12 @@ class BoundingBoxCapture:
 
         clean_screenshot = self.take_clean_screenshot(url)
 
-        buttons = self.get_all_buttons(url)
+        buttons = self.get_all_by_xpath(url, "//button")
+        textarea = self.get_all_by_xpath(url, "//textarea")
+
+        elements = buttons+textarea
         bounding_boxes = (
-            [self.get_bbox(element) for element in buttons] if buttons else []
+            [self.get_bbox(element) for element in elements] if elements else []
         )
 
         bbox_screenshot = self.take_bbox_screenshot(url)
