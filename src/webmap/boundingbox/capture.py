@@ -54,9 +54,11 @@ class BoundingBoxCapture:
         try:
             screenshot_png = self.driver.get_screenshot_as_png()
             image = Image.open(io.BytesIO(screenshot_png))
-            buttons = self.get_all_buttons(url)
+            buttons = self.get_all_by_xpath(url, "//button")
+            textarea = self.get_all_by_xpath(url, "//textarea")
+            elements = buttons + textarea
             draw = ImageDraw.Draw(image)
-            for element in buttons:
+            for element in elements:
                 bbox: BBox = self.get_bbox(element)
                 if (
                     abs(bbox.x_max - bbox.x_min) <= 5
@@ -86,17 +88,7 @@ class BoundingBoxCapture:
             print(f"BoundingBox Error: getting html source {url}: {e}")
             return ""
 
-    def get_all_buttons(self, url: str) -> list[WebElement]:
-        if url is not self._loaded_page:
-            self.load_page(url)
-        try:
-            buttons = self.driver.find_elements(By.XPATH, "//button")
-            return buttons
-        except Exception as e:
-            print(f"BoundingBox Error: getting all buttons {url}: {e}")
-            return []
-        
-    def get_all_by_xpath(self, url: str, x_string) -> list[WebElement]:
+    def get_all_by_xpath(self, url: str, x_string: str) -> list[WebElement]:
         if url is not self._loaded_page:
             self.load_page(url)
         try:
@@ -124,7 +116,7 @@ class BoundingBoxCapture:
         buttons = self.get_all_by_xpath(url, "//button")
         textarea = self.get_all_by_xpath(url, "//textarea")
 
-        elements = buttons+textarea
+        elements = buttons + textarea
         bounding_boxes = (
             [self.get_bbox(element) for element in elements] if elements else []
         )
