@@ -82,12 +82,19 @@ class BoundingBoxDB(Database):
                 )
             return True
 
-    def get_screenshot(self, url: str) -> bytes | None:
+    def get_screenshot(self, url: str, screenshot_type: str = "clean") -> bytes | None:
         """Retrieve screenshot data from database."""
         with self._driver.session() as session:
-            result = session.run(
-                "MATCH (s:Screenshot {url: $url}) RETURN s.data as data", url=url
-            )
+            if screenshot_type != "clean":
+                result = session.run(
+                    f'MATCH (s:Screenshot) WHERE s.url = "{url}" AND s.type = "{screenshot_type}" RETURN s.data as data'
+                )
+            else:
+                result = session.run(
+                    "MATCH (s:Screenshot {url: $url}) WHERE s.type IS NULL OR s.type = 'clean' RETURN s.data as data",
+                    url=url,
+                )
+
             record = result.single()
             if record and record["data"]:
                 return base64.b64decode(record["data"])
@@ -100,7 +107,7 @@ class BoundingBoxDB(Database):
                 """MATCH (p:Page {url: $url})-[:HAS_BBOX]->(b:BoundingBox)
                    RETURN b.x_min as x_min, b.y_min as y_min, 
                           b.x_max as x_max, b.y_max as y_max,
-                          b.width as width, b.height as height
+                          b.element_text as text, b.element_type as name
                    ORDER BY b.index""",
                 url=url,
             )
