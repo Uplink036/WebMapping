@@ -1,28 +1,31 @@
 [project]
-name = "WebMapping"
+name = "webmapping"
 version = "3.1.0"
 authors = [{name="Uplink036"}]
 description = "A simple web mapping application"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "requests",
-    "html5lib", 
-    "bs4",
-    "plotly",
-    "networkx",
     "numpy",
-    "matplotlib",
     "neo4j",
     "dotenv",
-    "fastapi",
-    "uvicorn",
-    "selenium"
+    "requests",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 
 [project.optional-dependencies]
+crawler = [
+    "html5lib", 
+    "bs4",
+    "selenium"
+]
+dashboard = [
+    "bs4",
+    "selenium",
+    "fastapi",
+    "uvicorn",
+]
 dev = [
     "build",
     "coverage", 
@@ -36,14 +39,18 @@ lint = [
     "isort",
     "mypy"
 ]
-all = ["WebMapping[dev,lint]"]
+all = ["WebMapping[dev,lint,dev,crawler]"]
 
 [build-system]
 requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+sources = ["src"]
+
 [tool.hatch.build.targets.wheel]
-packages = ["src/webmap"]
+packages = ["src/dashboard", "src/webmap"]
+
 
 [tool.isort]
 atomic = true

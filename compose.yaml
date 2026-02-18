@@ -2,8 +2,30 @@ services:
   database:
     image: neo4j:latest
     environment:
-        - NEO4J_AUTH=neo4j/password
+      NEO4J_AUTH: neo4j/password
     ports:
       - "7474:7474"
       - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - webmap-network
     restart: always
+
+  dashboard:
+    image: webmap-dashboard
+    environment:
+      - DATABASE_URL="NA"
+      - DATABASE_PORT="NA"
+    ports:
+      - "8002:8000"
+    networks:
+      - webmap-network
+    restart: "no"
+
+
+volumes:
+  neo4j_data:
+
+networks:
+  webmap-network:
