@@ -72,6 +72,7 @@ async def dashboard() -> str:
             <div>Sleep Time (seconds)</div>
         </div>
         <div class="controls">
+            <button onclick="fetch('/api/set_status?status=true').then(() => location.reload())">Start Crawler</button>
             <button onclick="fetch('/api/set_status?status=false').then(() => location.reload())">Stop Crawler</button>
             <button onclick="setSleepTime()">Set Sleep Time</button>
         </div>

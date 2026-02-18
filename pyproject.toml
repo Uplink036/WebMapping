@@ -18,7 +18,8 @@ license-files = ["LICEN[CS]E*"]
 crawler = [
     "html5lib", 
     "bs4",
-    "selenium"
+    "selenium",
+    "pillow",
 ]
 dashboard = [
     "bs4",
@@ -32,12 +33,12 @@ dev = [
     "hypothesis",
     "responses",
     "pytest",
-    "pytest-cov"
+    "pytest-cov",
 ]
 lint = [
     "black",
     "isort",
-    "mypy"
+    "mypy",
 ]
 all = ["WebMapping[dev,lint,dev,crawler]"]
 

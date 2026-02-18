@@ -26,6 +26,7 @@ class Crawler:
             self._stack.push(self.starting_url)
             self._status.log_status(f"Crawler started with URL: {self.starting_url}")
             self._status.log_status(f"{self._plugins}")
+
         while self._control.get_status():
             if self._stack.count() > 0:
                 url = self._stack.pop()

@@ -20,7 +20,7 @@ dashboard: ## Docker build dashboard
 	docker build -f ./containers/dashboard/Dockerfile -t webmap-dashboard .
 
 crawler: ## Docker build crawler
-	docker build -f /containers//crawler/Dockerfile -t webmap-crawler .
+	docker build -f ./containers/crawler/Dockerfile -t webmap-crawler .
 
 stop: ## Stop the compose
 	docker compose down
