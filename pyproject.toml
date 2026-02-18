@@ -40,7 +40,7 @@ lint = [
     "isort",
     "mypy",
 ]
-all = ["WebMapping[dev,lint,dev,crawler]"]
+all = ["WebMapping[dev,lint,dashboard,crawler]"]
 
 [build-system]
 requires = ["hatchling >= 1.26"]
