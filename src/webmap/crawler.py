@@ -1,3 +1,4 @@
+import time
 from time import sleep
 from typing import Callable, List
 
@@ -38,6 +39,7 @@ class Crawler:
             self._status.log_status(f"{self._plugins}")
 
         while self._should_run():
+            start_time = time.time()
             if self._stack.count() > 0:
                 url = self._stack.pop()
                 if url is None:
@@ -60,7 +62,10 @@ class Crawler:
                 links = self._fetch_links(url)
                 for element in self._parse_links(url, links):
                     self._stack.push(element)
-            sleep(self._control.get_time())
+            run_time = round(time.time() - start_time, 2)
+            remaining_sleep_time = self._control.get_time()-run_time
+            if remaining_sleep_time > 0:
+                sleep(remaining_sleep_time)
 
     def _parse_links(
         self, website_origin: str, list_with_links: list[str]
