@@ -1,31 +1,18 @@
 import io
 
 from PIL import Image, ImageDraw
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from webmap.screenshot import ScreenshotCapture
 from webmap.boundingbox.bbox import BBox
 from webmap.boundingbox.database import BoundingBoxDB
 
-SERVER = "http://selenium:4444/wd/hub"
 
-
-class BoundingBoxCapture:
+class BoundingBoxCapture(ScreenshotCapture):
     def __init__(self) -> None:
+        super().__init__()
         self.db = BoundingBoxDB()
-        self._setup_driver()
-
-    def _setup_driver(self) -> None:
-        """Setup remote Chrome driver."""
-        options = Options()
-        options.add_argument("--no-sandbox")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-
-        self.driver = webdriver.Remote(command_executor=SERVER, options=options)
         self._loaded_page = ""
 
     def load_page(self, url: str) -> None:
@@ -40,12 +27,7 @@ class BoundingBoxCapture:
         """Take screenshot of URL and return as bytes."""
         if url is not self._loaded_page:
             self.load_page(url)
-        try:
-            screenshot_png = self.driver.get_screenshot_as_png()
-            return screenshot_png
-        except Exception as e:
-            print(f"Screenshot Error: taking screenshot of {url}: {e}")
-            return None
+        return self.take_screenshot(url)
 
     def take_bbox_screenshot(self, url: str) -> bytes | None:
         """Take screenshot of URL and return as bytes."""
@@ -135,10 +117,3 @@ class BoundingBoxCapture:
         success &= self.db.save_bounding_boxes(url, bounding_boxes)
 
         return success
-
-    def close(self) -> None:
-        """Close the webdriver."""
-        self.driver.quit()
-
-    def __del__(self) -> None:
-        self.close()
