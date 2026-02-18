@@ -20,9 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install .[lint]
-        mypy --install-types
-        pip install types-requests
+        make install
 
     - name: Lint code formatters
       run: |

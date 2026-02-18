@@ -14,10 +14,20 @@ class Crawler:
         self._control: Neo4JControl = Neo4JControl()
         self._status: StatusDB = StatusDB()
         self._plugins: List[Callable[[str], None]] = []
+        self._stop_requested: bool = False
 
     def add(self, func: Callable[[str], None]) -> None:
         """Add a function to be applied to each URL."""
         self._plugins.append(func)
+
+    def stop(self) -> None:
+        """Stop the crawler."""
+        self._stop_requested = True
+        self._status.log_status("Crawler stop command received")
+
+    def _should_run(self) -> bool:
+        """Check if crawler should continue running."""
+        return self._control.get_status() and not self._stop_requested
 
     def run(self) -> None:
         if self._stack.count() == 0:
@@ -26,7 +36,8 @@ class Crawler:
             self._stack.push(self.starting_url)
             self._status.log_status(f"Crawler started with URL: {self.starting_url}")
             self._status.log_status(f"{self._plugins}")
-        while self._control.get_status():
+
+        while self._should_run():
             if self._stack.count() > 0:
                 url = self._stack.pop()
                 if url is None:

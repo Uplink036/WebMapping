@@ -12,20 +12,38 @@ The project requires Python 3.12+ and all dependencies are managed through `pypr
 
 ## Setup
 
-### Database Setup
+### Running with Docker Compose
 
-The application requires a Neo4j database. You can start one using Docker Compose:
+The application runs as two separate containers: a crawler and a dashboard. Start all services using:
 
 ```bash
 make compose
 ```
 
-This starts a Neo4j instance accessible at `http://localhost:7474` (web interface) and `bolt://localhost:7687` (database connection).
+This starts:
+- **Dashboard**: Web interface at `http://localhost:8000`
+- **Crawler**: Background service for crawling websites
+- **Neo4j Database**: Web interface at `http://localhost:7474`, database at `bolt://localhost:7687`
+- **Selenium**: Chrome browser for screenshot capture
 
-### Environment Configuration
+To stop all services:
 
-Copy the example environment file and configure your database connection:
+```bash
+make stop
+```
 
+### Local Development Setup
+
+For local development without Docker, you need to run two separate processes:
+
+#### Prerequisites
+
+1. Start a Neo4j database (can use Docker or devcontainer):
+```bash
+docker run -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:latest
+```
+
+2. Configure environment:
 ```bash
 cp .env.example .env
 ```
@@ -37,15 +55,26 @@ NEO4j_USERNAME="neo4j"
 NEO4j_PASSWORD="password"
 ```
 
-### Installation
-
-Install the package in development mode with all dependencies:
-
+3. Install dependencies:
 ```bash
 make install
 ```
 
-This installs the package with development dependencies including testing and linting tools.
+#### Running Locally
+
+In separate terminals, run:
+
+**Terminal 1 - Dashboard:**
+```bash
+uvicorn dashboard.api:app --host 0.0.0.0 --port 8000
+```
+
+**Terminal 2 - Crawler:**
+```bash
+python src/webmap/main.py
+```
+
+The dashboard will be accessible at `http://localhost:8000`.
 ## Usage
 
 ### Basic Usage
@@ -85,7 +114,7 @@ Note, if you want to be able to see these tings on the webpage as well, you will
 
 ### Web Dashboard
 
-The application includes a web-based dashboard accessible at `http://localhost:8000` when running the main application. The dashboard provides real-time crawling statistics, crawler control, and screenshot viewing capabilities.
+The dashboard container provides a web interface accessible at `http://localhost:8000` when running with Docker Compose. The dashboard provides real-time crawling statistics, crawler control, and screenshot viewing capabilities.
 
 ### Command Line Tools
 
@@ -104,14 +133,20 @@ This project includes a devcontainer configuration for development in VS Code wi
 ## Project Structure
 
 ```
-src/webmap/
-├── *.py                    # Main functionality
-├── screenshot/             # Screenshot capture functionality
-│   └── *.py
-├── boundingbox/            # Bounding box detection and capture
-│   └── *.py
-└── database/               # Neo4j database integration
-    └── *.py
+src/
+├── webmap/                 # Crawler application
+│   ├── main.py            
+│   ├── screenshot/         # Screenshot capture
+│   ├── boundingbox/        # Bounding box detection
+│   └── database/           # Neo4j database integration
+├── dashboard/              # Dashboard application
+│   ├── api.py              # FastAPI web interface
+│   ├── screenshot/         # Screenshot web plugin
+│   └── boundingbox/        # Bounding box web plugin
+containers/
+├── crawler/                # Crawler Docker container
+└── dashboard/              # Dashboard Docker container
+tools/                      # Utility scripts
 ```
 
 ## Contributions

@@ -72,6 +72,7 @@ async def dashboard() -> str:
             <div>Sleep Time (seconds)</div>
         </div>
         <div class="controls">
+            <button onclick="fetch('/api/set_status?status=true').then(() => location.reload())">Start Crawler</button>
             <button onclick="fetch('/api/set_status?status=false').then(() => location.reload())">Stop Crawler</button>
             <button onclick="setSleepTime()">Set Sleep Time</button>
         </div>
@@ -157,14 +158,14 @@ async def get_random_screenshot(screenshot_type: str = Query("clean")) -> Respon
 
 # Register plugin sections
 try:
-    from webmap.screenshot.web import screenshot_section
+    from dashboard.screenshot.web import screenshot_section
 
     register_plugin_section(screenshot_section)
 except ImportError:
     pass
 
 try:
-    from webmap.boundingbox.web import boundingbox_section
+    from dashboard.boundingbox.web import boundingbox_section
 
     register_plugin_section(boundingbox_section)
 except ImportError:

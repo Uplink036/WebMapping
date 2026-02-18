@@ -3,7 +3,7 @@ build: ## Build the (local) package
 
 install: ## Install the (local) package
 	pip install -e .[all]
-	mypy --install-types
+	yes | mypy --install-types
 	pip install types-requests
 
 .PHONY: tests
@@ -13,8 +13,14 @@ tests: ## Run tests
 report: ## Report coverage results
 	coverage report -m
 
-compose: ## Start the compose
+compose: dashboard crawler ## Start the compose
 	docker compose up
+
+dashboard: ## Docker build dashboard
+	docker build -f ./containers/dashboard/Dockerfile -t webmap-dashboard .
+
+crawler: ## Docker build crawler
+	docker build -f ./containers/crawler/Dockerfile -t webmap-crawler .
 
 stop: ## Stop the compose
 	docker compose down
