@@ -35,7 +35,7 @@ class ScreenshotCapture:
             print(f"Screenshot Error: taking screenshot of {url}: {e}")
             return None
         
-    def _fullpage_screenshot(self, scroll_delay=0.3) -> bytes:
+    def _fullpage_screenshot(self, scroll_delay: float = 0.3) -> bytes:
         """
         Takes a fullscreen pageshot
         """
