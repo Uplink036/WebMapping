@@ -22,8 +22,14 @@ class ScreenshotCapture:
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
+        options.add_argument('--disable-notifications')
+        
+        prefs = {
+            "profile.default_content_setting_values.cookies": 2,
+            "profile.block_third_party_cookies": True
+        }
+        options.add_experimental_option("prefs", prefs)
 
-        # Connect to remote Selenium standalone container
         self.driver = webdriver.Remote(command_executor=SERVER, options=options)
 
     def take_screenshot(self, url: str) -> bytes | None:
