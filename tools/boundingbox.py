@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     bBoxCapture = BoundingBoxCapture()
 
-    image: bytes = bBoxCapture.take_bbox_screenshot(url)
+    image: bytes = bBoxCapture.take_bbox_screenshot(url, fullpage=True)
     if image:
         with open(filename, "wb") as f:
             f.write(image)
