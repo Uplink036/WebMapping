@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-"""Tool that will take and retrive from database a "boundingbox"""
+"""Tool that will take a screenshot of a URL"""
 
-import io
 import sys
 
-from PIL import Image
-
-from webmap.boundingbox import BoundingBoxCapture, BoundingBoxDB
+from webmap.screenshot import ScreenshotCapture
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python boundingbox <url> [filename]")
+        print("Usage: python screenshot.py <url> [filename]")
         sys.exit(1)
 
     url = sys.argv[1]
     filename = sys.argv[2] if len(sys.argv) > 2 else "screenshot.png"
 
-    bBoxCapture = BoundingBoxCapture()
+    capture = ScreenshotCapture()
 
-    image: bytes = bBoxCapture.take_bbox_screenshot(url, fullpage=True)
+    image = capture.take_screenshot(url)
     if image:
         with open(filename, "wb") as f:
             f.write(image)

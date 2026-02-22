@@ -1,9 +1,10 @@
+import time
 from time import sleep
 from typing import Callable, List
 
 from webmap.database import Neo4JControl, Neo4JGraph, Neo4JStack, StatusDB
 from webmap.scraper import get_all_links, get_HTML_response, get_soup
-from webmap.url_handling import isValid
+from webmap.url_handling import is_valid
 
 
 class Crawler:
@@ -38,13 +39,14 @@ class Crawler:
             self._status.log_status(f"{self._plugins}")
 
         while self._should_run():
+            start_time = time.time()
             if self._stack.count() > 0:
                 url = self._stack.pop()
                 if url is None:
                     self._status.log_status("Stack returned unexpected value")
                     continue
 
-                if not isValid(url):
+                if not is_valid(url):
                     self._status.log_status(f"Invalid URL: {url}")
                     continue
 
@@ -60,14 +62,17 @@ class Crawler:
                 links = self._fetch_links(url)
                 for element in self._parse_links(url, links):
                     self._stack.push(element)
-            sleep(self._control.get_time())
+            run_time = round(time.time() - start_time, 2)
+            remaining_sleep_time = self._control.get_time() - run_time
+            if remaining_sleep_time > 0:
+                sleep(remaining_sleep_time)
 
     def _parse_links(
         self, website_origin: str, list_with_links: list[str]
     ) -> list[str]:
         found_urls = []
         for link in list_with_links:
-            if not isValid(link):
+            if not is_valid(link):
                 continue
 
             found_urls.append(link)
