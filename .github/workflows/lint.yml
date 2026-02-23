@@ -24,8 +24,8 @@ jobs:
 
     - name: Lint code formatters
       run: |
-        isort --check src/ && \
-        black --check src/
+        isort --check --diff src/ && \
+        black --check --diff src/
 
     - name: Lint static analysis
       run: |
