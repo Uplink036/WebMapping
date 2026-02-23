@@ -103,8 +103,7 @@ class BoundingBoxCapture(ScreenshotCapture):
 
     def _get_header_height(self) -> int:
         """Returns the header height of the currennt driver"""
-        fixed_header_height: int = self.driver.execute_script(
-            """
+        fixed_header_height: int = self.driver.execute_script("""
                 var maxHeight = 0;
                 var elements = document.querySelectorAll('*');
                 elements.forEach(function(el) {
@@ -117,8 +116,7 @@ class BoundingBoxCapture(ScreenshotCapture):
                     }
                 });
                 return maxHeight;
-            """
-        )
+            """)
         return fixed_header_height
 
     def get_html(self, url: str) -> str:

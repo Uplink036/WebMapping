@@ -26,9 +26,9 @@ stop: ## Stop the compose
 	docker compose down
 
 lint: ## Lint source
-	isort src/
-	black src/
-	mypy src/
+	python -m isort src/
+	python -m black src/
+	python -m mypy src/
 
 clean: ## Clean the repo 
 	rm -f pytest.xml
