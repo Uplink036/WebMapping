@@ -30,7 +30,9 @@ class ScreenshotCapture:
         }
         options.add_experimental_option("prefs", prefs)
 
-        self.driver = webdriver.Remote(command_executor=SERVER, options=options)
+        self.driver: webdriver.Remote = webdriver.Remote(
+            command_executor=SERVER, options=options
+        )
 
     def take_screenshot(self, url: str) -> bytes | None:
         """Take screenshot of URL and return as bytes."""

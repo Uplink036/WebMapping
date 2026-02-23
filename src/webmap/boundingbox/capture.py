@@ -1,5 +1,6 @@
 import io
 import time
+from typing import cast
 
 from PIL import Image, ImageDraw
 from selenium.webdriver.common.by import By
@@ -125,7 +126,7 @@ class BoundingBoxCapture(ScreenshotCapture):
             self._load_page(url)
         try:
             html = self.driver.page_source
-            return html
+            return cast(str, html)
         except Exception as e:
             print(f"BoundingBox Error: getting html source {url}: {e}")
             return ""
@@ -135,7 +136,7 @@ class BoundingBoxCapture(ScreenshotCapture):
             self._load_page(url)
         try:
             buttons = self.driver.find_elements(By.XPATH, x_string)
-            return buttons
+            return cast(list[WebElement], buttons)
         except Exception as e:
             print(f"BoundingBox Error: getting all by x path {url}: {e}")
             return []
