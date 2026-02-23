@@ -10,6 +10,7 @@ dependencies = [
     "neo4j",
     "dotenv",
     "requests",
+    "pillow",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
@@ -19,7 +20,6 @@ crawler = [
     "html5lib", 
     "bs4",
     "selenium",
-    "pillow",
 ]
 dashboard = [
     "bs4",
